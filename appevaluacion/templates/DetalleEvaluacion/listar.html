@@ -1,0 +1,142 @@
+{% extends "index.html" %}
+{% block title %} POSGRADO | Sustentaciones {% endblock title %}
+{% load static %}
+
+{% block css %}
+
+<!-- Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<!-- Select2 CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+<style>
+    .select2-container {
+        z-index: 9999;
+    }
+
+    .select2-dropdown {
+        z-index: 99999;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+<!-- Bread crumb and right sidebar toggle -->
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h3 class="text-themecolor"><b>DETALLE DE EVALUACIONES</b></h3>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+            <li class="breadcrumb-item active">Detalle de sustentaciones</li>
+        </ol>
+    </div>
+    <!-- <div class="col-md-7 align-self-center mr">
+        <a href="" class="btn waves-effect waves-light btn btn-info pull-right text-white"><i
+                class="fa fa-plus-square"></i> Nuevo</a>      
+    </div> -->
+
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="tabladetallesustentaciones">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>PONENTE</th>
+                                <th>JURADO</th>
+                                <th>ORIGINALIDAD</th>
+                                <th>IMPORTANCIA</th>
+                                <th>COHERENCIA</th>
+                                <th>METODOLOGIA</th>
+                                <th>VALIDEZ</th>
+                                <th>DOMINIO TEMA</th>
+                                <th>PUNTAJE FINAL</th>
+                                <th>ACCIONES</th>
+                            </tr>
+                        </thead>
+                        {% if page_obj %}
+                        {% for item_evaluacion in page_obj %}
+                        <tr>
+                            <td>{{ item_evaluacion.alumno}}</td>
+                            <td>{{ item_evaluacion.jurado}}</td>
+                            <td>{{ item_evaluacion.originalidad }}</td>                    
+                            <td>{{ item_evaluacion.importancia }}</td>
+                            <td>{{ item_evaluacion.coherencia }}</td>
+                            <td>{{ item_evaluacion.metodologia }}</td>
+                            <td>{{ item_evaluacion.validez }}</td>
+                            <td>{{ item_evaluacion.dominio_tema }}</td>
+                            <td>{{ item_evaluacion.puntajeFinal }}</td>
+                            <td style="text-align: center;">                           
+                                <a href="{% url 'evaluar_sustentacion' item_evaluacion.idDetEvaluacion %}" onclick="" class="btn btn-secondary btn-sm"><i class="fa-solid fa-eye"></i></a>
+                            </td>                    
+                        </tr>
+                        {% endfor %}                 
+                        {% else %}                
+                        <tr style="text-align: center;">
+                            <td colspan="10">
+                                <p>No hay Registros</p>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card-footer">           
+    <div class="d-flex justify-content-end pt-2">
+        <nav aria-label="pagination-django">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}                    
+                    <li class="page-item"><a class="page-link" href="?page=1">Primera</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}"><<</a></li>                        
+                {% endif %}
+                <li class="page-item"><a class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</a></li>
+                {% if page_obj.has_next %}                       
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">>></a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Ultima</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+{% block js %}
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Select2 JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+<!-- Libreria DAtatables.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+
+<!-- Libreria DAtatables.css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href=" https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css">
+
+<!-- Select2 -->
+<script>
+    $(document).ready(function () {
+        $('.js-example-basic-single').select2({
+            dropdownParent: $('#staticBackdrop .modal-body')
+        });
+    });
+</script>
+
+
+
+{% endblock %}

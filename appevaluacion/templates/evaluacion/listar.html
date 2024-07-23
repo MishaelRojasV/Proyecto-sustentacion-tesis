@@ -1,0 +1,393 @@
+{% extends "index.html" %}
+{% block title %} POSGRADO | Sustentaciones {% endblock title %}
+{% load static %}
+
+{% block css %}
+
+<!-- Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<!-- Select2 CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+<style>
+    .select2-container {
+        z-index: 9999;
+    }
+
+    .select2-dropdown {
+        z-index: 99999;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+<!-- Bread crumb and right sidebar toggle -->
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h3 class="text-themecolor"><b>LISTADO DE SUSTENTACIONES</b></h3>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+            <li class="breadcrumb-item active">Lista de sustentación</li>
+        </ol>
+    </div>
+    <div class="col-md-7 align-self-center mr">
+        <a href="{% url 'crear_evaluacion' %}" class="btn waves-effect waves-light btn btn-info pull-right text-white"><i
+                class="fa fa-plus-square"></i> NUEVO</a>      
+    </div> 
+
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="tablasustentaciones">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>CODIGO</th>
+                                <th>PONENTE</th>
+                                <th>MENCIÓN</th>
+                                <th>FECHA</th>
+                                <th>H.INICIAL</th>
+                                <th>H.FINAL</th>
+                                <th><center>JURADO</center></th>
+                                <th><center>ACCIONES</center></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablebody_sustentaciones">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Asignar Jurados -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #0dcaf0; color:#fff">
+                <h5 class="modal-title" id="staticBackdropLabel">ASIGNACIÓN DE JURADOS</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Presidente -->
+                <form id="crearDetalleFormPresidente" disabled>
+                    {% csrf_token %}
+                    <h6><b>JURADO #01</b> | Presidente(a)</h6>
+                    <select class="js-example-basic-single" name="id_jurado_presidente" id="id_jurado_presidente"
+                        style="width: 70%;">
+                        <option value="#">Seleccione...</option>
+                        {% for jurado in jurados_presidente %}
+                        <option value="{{ jurado.idJurado }}">{{ jurado.nombre_jurado }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" form="crearDetalleFormPresidente"
+                        class="btn btn-secondary btn-sm btn-juradop-id"><i class="fa-solid fa-check-double"></i>
+                        Asignar</button>
+                </form>
+                <hr>
+                 <!-- Form Presidente -->
+                <form action="">
+                    <h6><b>JURADO #02</b> | Secretario(a)</h6>
+                    <select class="js-example-basic-single" name="id_jurado_secretario" id="id_jurado_secretario" style="width: 70%;">
+                        <option value="#">Seleccione...</option>
+                        {% for jurado in jurados_secretario %}
+                        <option value="{{ jurado.idJurado }}">{{ jurado.nombre_jurado }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="button" class="btn btn-secondary btn-sm btn-juradoss-id"><i class="fa-solid fa-check-double"></i>
+                        Asignar</button>
+                </form>
+
+                <hr>
+
+                <form action="">
+                    <h6><b>JURADO #03</b> | Vocal</h6>
+                    <select class="js-example-basic-single" name="id_jurado_vocal" id="id_jurado_vocal" style="width: 70%;">
+                        <option value="#">Seleccione...</option>
+                        {% for jurado in jurados_vocal %}
+                        <option value="{{ jurado.idJurado }}">{{ jurado.nombre_jurado }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="button" class="btn btn-secondary btn-sm btn-juradosv-id"><i class="fa-solid fa-check-double"></i>
+                        Asignar</button>
+                </form>
+            </div>           
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+
+{% block js %}
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Select2 JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+<!-- Libreria DAtatables.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+
+<!-- Libreria DAtatables.css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href=" https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css">
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Select2 -->
+    <script>
+        $(document).ready(function () {
+            $('.js-example-basic-single').select2({
+                dropdownParent: $('#staticBackdrop .modal-body')
+            });
+        });
+    </script>
+
+ 
+    <!-- Mensaje de exito -->
+    {% if messages %}
+        {% for m in messages %}
+            <script>
+                Swal.fire({
+                "title": "Éxito",
+                "text":"{{m}}",
+                "icon":"success"
+                })
+                console.log("{{m}}")
+            </script>
+        {% endfor %}
+    {% endif %}
+
+
+<!-- Llenar Tabla -->
+<script>
+    let dataTable;
+    let dataTableIsInitialized = false;
+
+    const dataTableOptions = {
+        columnDefs: [{
+                orderable: false,
+                targets: [3, 4, 5, 6, 7]
+            },
+            {
+                searchable: false,
+                targets: [3, 4, 5, 6, 7]
+            }
+        ],
+        pageLength: 10,
+        destroy: true,
+        language: {
+            lengthMenu: "Mostrar _MENU_ registros por página",
+            zeroRecords: "Ningún registro encontrado",
+            info: "Mostrando de _START_ a _END_ de un total de _TOTAL_ registros",
+            infoEmpty: "Ningún registro encontrado",
+            infoFiltered: "(filtrados desde _MAX_ registros totales)",
+            search: "Buscar: ",
+            loadingRecords: "Cargando...",
+            paginate: {
+                first: "Primero",
+                last: "Último",
+                next: "Siguiente",
+                previous: "Anterior"
+            }
+        }
+    };
+
+    const initDataTable = async () => {
+        if (dataTableIsInitialized) {
+            dataTable.destroy();
+        }
+        await listasustentacion();
+        dataTable = $("#tablasustentaciones").DataTable(dataTableOptions);
+        dataTableIsInitialized = true;
+    };
+
+    const listasustentacion = async () => {
+        try {
+            const response = await fetch("/evaluacion/listar_evaluacion_json");
+            const data = await response.json();
+            let content = '';
+            data.evaluacion.forEach((item_evaluacion) => {
+                const editUrl = `/evaluacion/edit/${item_evaluacion.idEvaluacion}/`;
+                const alumno = data.alumnos[item_evaluacion.alumno_id];
+                content += `
+                    <tr>          
+                        <td>${item_evaluacion.codigo}</td>                    
+                        <td>${alumno.nombre_ponente}</td>                                                           
+                        <td>${alumno.mencion}</td>
+                        <td>${alumno.fecha_sustentacion}</td>
+                        <td>${alumno.hora_inicio_sustentacion}</td>                       
+                        <td>${alumno.hora_fin_sustentacion}</td>                 
+                        <td><center><button type="button"  data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-secondary btn-sm btn-enviar-id" data-id-evaluacion="${item_evaluacion.idEvaluacion}" data-alumno-id="${alumno.idAlumno}" style="color: #fff;"><i class="fa-solid fa-gavel fa-lg"></i> Asignar</button></center></td>                     
+                        <td>
+                            <center>
+                                <a href="${editUrl}" class="btn btn-sm btn-success" style=" color: white;"><i class='fa fa-edit'></i></a>
+                                <button onclick="eliminarEvaluacion(${item_evaluacion.idEvaluacion})" class='btn btn-sm btn-danger'><i class='fa-solid fa-trash-can'></i></button>                             
+                            </center>
+                        </td>
+                    </tr>`;
+            });
+            document.getElementById('tablebody_sustentaciones').innerHTML = content;
+        } catch (ex) {
+            console.error('Error al listar las sustentaciones:', ex);
+        }
+    };
+
+    window.addEventListener("load", async () => {
+        await initDataTable();
+    });
+</script>
+
+    <!-- Eliminar un usuario -->
+    <script>
+        function eliminarEvaluacion(id){
+            Swal.fire({
+                title: "¿Realmente deseas eliminar este registro?",
+                text: "ID del Evaluacion: " + id,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#A19D9C',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'No, cancelar',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/evaluacion/delete/${id}/`;
+                }
+            });
+        }
+    </script>
+
+
+<!-- Para Asignar jurado Presidente  -->
+<script>
+    $(document).ready(function () {
+        let idEvaluacionGlobal;
+        let idAlumnoGlobal; 
+        $(document).on('click', '.btn-enviar-id', function () {
+            idEvaluacionGlobal = $(this).data('id-evaluacion');
+            idAlumnoGlobal = $(this).data('alumno-id');
+            console.log('ID Evaluacion:', idEvaluacionGlobal);
+            console.log('ID alumno:', idAlumnoGlobal);
+        });
+
+        $(document).on('click', '.btn-juradop-id', function (e) {
+            e.preventDefault(); 
+            var idJuradoPresidente = $('#id_jurado_presidente').val();
+            console.log('ID Jurado Presidente:', idJuradoPresidente);
+
+            $.ajax({
+                url: '{% url "crear_detalle_evaluacion" %}',
+                type: 'POST',
+                data: {
+                    'id_evaluacion': idEvaluacionGlobal,
+                    'id_jurado': idJuradoPresidente,
+                    'id_alumno': idAlumnoGlobal,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function (response) {
+                    console.log(response);
+                    alert('¡Jurado Asignado correctamente!');
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    alert('¡Hubo un Error!');
+                }
+            });
+        });
+    });
+</script>
+
+
+<!-- Para Asignar jurado Secretario  -->
+<script>
+    $(document).ready(function () {
+        let idEvaluacionGlobal;
+        let idAlumnoGlobal; 
+        $(document).on('click', '.btn-enviar-id', function () {
+            idEvaluacionGlobal = $(this).data('id-evaluacion');
+            idAlumnoGlobal = $(this).data('alumno-id');
+            console.log('ID Evaluacion:', idEvaluacionGlobal);
+            console.log('ID alumno:', idAlumnoGlobal);
+        });
+
+        $(document).on('click', '.btn-juradoss-id', function (e) {
+            e.preventDefault(); 
+            var id_jurado_secretario = $('#id_jurado_secretario').val();
+            console.log('ID Jurado Secretario:', id_jurado_secretario);
+
+            $.ajax({
+                url: '{% url "crear_detalle_evaluacion" %}',
+                type: 'POST',
+                data: {
+                    'id_evaluacion': idEvaluacionGlobal,
+                    'id_jurado': id_jurado_secretario,
+                    'id_alumno': idAlumnoGlobal,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function (response) {
+                    console.log(response);
+                    alert('¡Jurado Asignado correctamente!');
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    alert('¡Hubo un Error!');
+                }
+            });
+        });
+    });
+</script>
+
+<!-- Para Asignar jurado Vocal  -->
+<script>
+    $(document).ready(function () {
+        let idEvaluacionGlobal;
+        let idAlumnoGlobal; 
+        $(document).on('click', '.btn-enviar-id', function () {
+            idEvaluacionGlobal = $(this).data('id-evaluacion');
+            idAlumnoGlobal = $(this).data('alumno-id');
+            console.log('ID Evaluacion:', idEvaluacionGlobal);
+            console.log('ID alumno:', idAlumnoGlobal);
+        });
+
+        $(document).on('click', '.btn-juradosv-id', function (e) {
+            e.preventDefault(); 
+            var idJuradoVocal = $('#id_jurado_vocal').val();
+            console.log('ID Jurado Presidente:', idJuradoVocal);
+
+            $.ajax({
+                url: '{% url "crear_detalle_evaluacion" %}',
+                type: 'POST',
+                data: {
+                    'id_evaluacion': idEvaluacionGlobal,
+                    'id_jurado': idJuradoVocal,
+                    'id_alumno': idAlumnoGlobal,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function (response) {
+                    console.log(response);
+                    alert('¡Jurado Asignado correctamente!');
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    alert('¡Hubo un Error!');
+                }
+            });
+        });
+    });
+</script>
+
+
+{% endblock %}

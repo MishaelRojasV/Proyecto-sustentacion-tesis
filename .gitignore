@@ -1,0 +1,34 @@
+# Entorno virtual
+env-formtesis/
+
+# Archivos compilados de Python
+__pycache__/
+*.py[cod]
+
+# Archivos de configuración y dependencias
+*.env
+*.log
+*.pot
+*.pyc
+
+# Base de datos SQLite
+db.sqlite3
+
+# Archivos y carpetas generados automáticamente
+/media
+/static
+
+# Archivos de distribución y construcción
+*.egg-info/
+dist/
+build/
+
+# Archivos de prueba y cobertura
+.coverage
+htmlcov/
+.tox/
+.nox/
+.cache
+
+# Archivos de Jupyter Notebook
+.ipynb_checkpoints

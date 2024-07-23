@@ -1,0 +1,177 @@
+{% extends "index.html" %}
+{% block title %} POSGRADO | Usuarios {% endblock title %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h3 class="text-themecolor"><b>LISTADO DE USUARIOS</b></h3>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+            <li class="breadcrumb-item active">Lista de usuarios</li>
+        </ol>
+    </div>   
+    <div class="col-md-7 d-flex align-self-center mr justify-content-end">  
+        <a href="{% url 'creacion_usuario' %}" class="btn waves-effect waves-light btn btn-info pull-right text-white"><i
+            class="fa fa-plus-square"></i> NUEVO</a>     
+    </div> 
+        
+</div>
+<div class="row">
+    <!-- column -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="tablausuarios">
+                        <thead class="table-dark">
+                            <tr>                               
+                                <th >Id</th>
+                                <th>Nombres</th>                         
+                                <th>Username</th>
+                                <th>Password</th>                                  
+                                <th><center>Estado</center></th>                                  
+                                <th><center>Opciones</center></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablebody_usuarios">
+                        </tbody>                       
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+
+{% block js %}
+<!-- Libreria DAtatables.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+
+<!-- Libreria DAtatables.css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href=" https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css">
+
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   
+    <!-- Mensaje de exito -->
+    {% if messages %}
+        {% for m in messages %}
+            <script>
+                Swal.fire({
+                "title": "Éxito",
+                "text":"{{m}}",
+                "icon":"success"
+                })
+                console.log("{{m}}")
+            </script>
+        {% endfor %}
+    {% endif %}
+
+
+   <!-- Datatables -->
+   <script>
+        let dataTable;
+        let dataTableIsInitialized = false;
+
+        const dataTableOptions = {        
+            columnDefs: [               
+                { orderable: false, targets: [3, 4, 5]},
+                { searchable: false, targets: [0, 3, 4, 5] }
+            ],
+            pageLength: 10,
+            destroy: true,
+            language:{
+                lengthMenu: "Mostrar _MENU_ registros por página",
+                zeroRecords: "Ningun registro encontrado",
+                info: "Mostrando de _START_ a _END_ de un total de _TOTAL_ registros",
+                infoEmpty: "Ningún registro encontrado",
+                infoFiltered: "(filtrados desde _MAX_ registros totales)",
+                search: "Buscar: ",
+                loadingRecords: "Cargando...",
+                paginate:{
+                    first: "Primero",
+                    last: "Ultimo",
+                    next: "Siguiente",
+                    previous: "Anterior"
+                }
+            },                                            
+        };
+
+        const initDataTable = async () => {
+            if (dataTableIsInitialized) {
+                dataTable.destroy();
+            }
+            await listaUsuarios();
+            dataTable = $("#tablausuarios").DataTable(dataTableOptions);
+            dataTableIsInitialized = true;
+        };
+
+
+        const listaUsuarios = async (estado) => {
+            try {
+                const response = await fetch("/usuarios/listar_usuarios_json?estado=" + estado);
+                const data = await response.json();
+                let content = ``;
+                data.usuarios.forEach((item_usuario) => {
+                    const isActive = item_usuario.is_active ? 'ACTIVO' : 'INACTIVO';
+                    const editUrl = `/usuarios/edit/${item_usuario.id}/`;
+                    content += `
+                        <tr>                            
+                            <td><center>${item_usuario.id}</center></td>                    
+                            <td>${item_usuario.first_name}  ${item_usuario.last_name}</td>                                                           
+                            <td>${item_usuario.username}</td> 
+                            <td>${item_usuario.password}</td>
+                            <td>                       
+                                <center><span class="label label-info label-rounded" style="font-size:16px; ">${isActive}</span></center>
+                            </td>
+                            <td>
+                                <center>
+                                    <a href="${editUrl}" class="btn btn-sm btn-success" style=" color: white;"><i class='fa fa-edit'></i></a>
+                                    <button onclick="eliminarUsuario(${item_usuario.id})" class='btn btn-sm btn-danger'><i class='fa-solid fa-trash-can'></i></button>
+                                </center>
+                            </td>
+                        </tr>`
+                        ;
+                });
+                tablebody_usuarios.innerHTML = content;
+                
+            } catch (ex) {
+                alert(ex);
+            }
+        };
+
+        window.addEventListener("load", async () => {          
+            await initDataTable();
+        });
+
+    </script>
+
+    <!-- Eliminar un usuario -->
+    <script>
+        function eliminarUsuario(id){
+            Swal.fire({
+                title: "¿Realmente deseas eliminar este usuario?",
+                text: "ID del usuario: " + id,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#A19D9C',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'No, cancelar',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/usuarios/delete/${id}/`;
+                }
+            });
+        }
+    </script>
+      
+   
+{% endblock %}
+

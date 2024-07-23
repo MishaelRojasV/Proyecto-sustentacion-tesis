@@ -1,0 +1,190 @@
+{% extends "index.html" %}
+{% block title %} POSGRADO | Usuarios {% endblock title %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<style>
+    .btn-outline-secondary.active,
+    .btn-outline-secondary:active,
+    .btn-outline-secondary:focus,
+    .btn-outline-secondary:checked {
+        background-color: #6c757d;
+        color: white;
+    }
+</style>
+
+
+<!-- Bread crumb and right sidebar toggle -->
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h3 class="text-themecolor">EVALUACIÓN</h3>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+            <li class="breadcrumb-item active">Evaluación</li>
+        </ol>
+    </div>
+    <div class="col-md-7 align-self-center">
+        <a href="https://www.wrappixel.com/templates/adminwrap/"
+            class="btn waves-effect waves-light btn btn-info pull-right hidden-sm-down text-white"><i
+                class="fa fa-plus-square"></i> Nuevo</a>
+    </div>
+</div>
+
+<!--
+// v0 by Vercel.
+// https://v0.dev/t/AU1VHp8g2O2
+-->
+
+<div class="container mx-auto my-8">
+    <div class="text-center mb-6">
+        <h1 class="text-3xl font-bold">Sustentación de Tesis</h1>
+        <p class="text-gray-500">Bienvenido al sistema para realizar la evaluación de la sustentación.</p>
+    </div>
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div class="mb-4">
+            <div class="card-body" style="font-weight: 500;">
+                <div class="row  mt-3">
+                    <div class="col-md-1"> </div>
+                    <div class="col-md-6">
+                        <b>DATOS DEL PONENTE: </b>
+                        <p>{{ alumnodata.nombre_ponente }} </p>
+                    </div>
+                    <div class="col-md-4">
+                        <b>DNI: </b>
+                        <p>{{ alumnodata.dni }}</p>
+                    </div>
+                </div>  
+
+                <div class="row">
+                    <div class="col-md-1"> </div>
+                    <div class="col-md-3">
+                        <b>PROGRAMA: </b>
+                        <p>{{ alumnodata.doctorado_maestria }}</p>
+                    </div>
+                    <div class="col-md-3">
+                        <b>UNIDAD: </b>
+                        <p>{{ alumnodata.unidad }}</p>
+                    </div>
+                    <div class="col-md-5">
+                        <b>MENCIÓN: </b>
+                        <p>{{ alumnodata.mencion }}</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-1"> </div>
+                    <div class="col-md-9">
+                        <b>PONENCIA: </b>
+                        <center>
+                            <p>{{ alumnodata.ponencia }}</p>
+                        </center>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-1"> </div>
+                    <div class="col-md-3">
+                        <b>SALA: </b>
+                        <p>{{ alumnodata.sala }}</p>
+                    </div>
+                    <div class="col-md-2">
+                        <b>FECHA: </b>
+                        <p>{{ alumnodata.fecha_sustentacion }}</p>
+                    </div>
+                    <div class="col-md-1"> </div>
+                    <div class="col-md-2">
+                        <b>HORA INICIO: </b>
+                        <p>{{ alumnodata.hora_inicio_sustentacion }}</p>
+                    </div>
+                    <div class="col-md-2">
+                        <b>HORA FIN: </b>
+                        <p>{{ alumnodata.hora_fin_sustentacion }}</p>
+                    </div>                    
+                </div>
+                <div class="row">
+                    <div class="col-md-1"> </div>                    
+                    <div class="col-md-5">
+                        <b>ASESOR: </b>
+                        <p>{{ alumnodata.asesor }}</p>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="mb-4">
+                <div class="text-center mb-4">
+                    <h2 class="text-2xl font-bold">Evaluación</h2>
+                    <p class="text-gray-500">Selecciona una opción del 1 al 5 para cada ítem.</p>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-center">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row mb-2">
+                                        <div class="col-md-2">
+                                            {{ form.originalidad | as_crispy_field }}                                  
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.importancia | as_crispy_field }}                                  
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.coherencia | as_crispy_field }}                                  
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.metodologia | as_crispy_field }}                                  
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.validez | as_crispy_field }}                                  
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.dominio_tema | as_crispy_field }}                                  
+                                        </div>
+                                    </div>                            
+                                </div>    
+                                <div class="col-md-12">
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            {{ form.sugerencias | as_crispy_field }}                                  
+                                        </div>
+                                        
+                                        
+                                    </div>                            
+                                </div>   
+                                <div class="col-md-12">
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-primary" style="width: 50%;">
+                                            Guardar
+                                        </button>
+                                    </div>
+                                </div>
+         
+                            </div>                      
+                        </div>
+                    </form>
+                    {% csrf_token %}
+                    
+                    
+            
+                     
+                
+                </div>
+
+
+
+
+            </div>
+            
+        </div>
+    </div>
+
+
+    {% endblock content %}
+
+
+    {% block js %}
+
+
+    {% endblock %}

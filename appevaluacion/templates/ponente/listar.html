@@ -1,0 +1,179 @@
+{% extends "index.html" %}
+{% block title %} POSGRADO | Ponentes {% endblock title %}
+{% load static %}
+
+
+{% block content %}
+<!-- Bread crumb and right sidebar toggle -->
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h3 class="text-themecolor"><b>LISTADO DE PONENTES</b></h3>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+            <li class="breadcrumb-item active">Lista de ponentes</li>
+        </ol>
+    </div>   
+    <div class="col-md-7 align-self-center mr">
+        <a href="{% url 'crear_ponente' %}" class="btn waves-effect waves-light btn btn-info pull-right text-white"><i
+                class="fa fa-plus-square"></i> NUEVO</a>      
+    </div> 
+        
+</div>
+<div class="row">
+    <!-- column -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="tablaponentes">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>CODIGO</th>
+                                <th>DATOS DEL PONENTE</th>
+                                <th>DNI</th>
+                                <th>PROGRAMA</th>
+                                <th>UNIDADES</th>   
+                                <th>MENCIÓN</th>                                
+                                <th>ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablebody_ponentes">
+                        </tbody>         
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+{% block js %}
+<!-- Libreria DAtatables.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+
+<!-- Libreria DAtatables.css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href=" https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css">
+
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   
+    <!-- Mensaje de exito -->
+    {% if messages %}
+        {% for m in messages %}
+            <script>
+                Swal.fire({
+                "title": "Éxito",
+                "text":"{{m}}",
+                "icon":"success"
+                })
+                console.log("{{m}}")
+            </script>
+        {% endfor %}
+    {% endif %}
+
+
+<script>
+    let dataTable;
+    let dataTableIsInitialized = false;
+
+    const dataTableOptions = {
+        columnDefs: [{
+                orderable: false,
+                targets: [2, 6]
+            },
+            {
+                searchable: false,
+                targets: [2, 6] 
+            }
+        ],
+        pageLength: 10,
+        destroy: true,
+        language: {
+            lengthMenu: "Mostrar _MENU_ registros por página",
+            zeroRecords: "Ningún registro encontrado",
+            info: "Mostrando de _START_ a _END_ de un total de _TOTAL_ registros",
+            infoEmpty: "Ningún registro encontrado",
+            infoFiltered: "(filtrados desde _MAX_ registros totales)",
+            search: "Buscar: ",
+            loadingRecords: "Cargando...",
+            paginate: {
+                first: "Primero",
+                last: "Último",
+                next: "Siguiente",
+                previous: "Anterior"
+            }
+        }
+    };
+
+    const initDataTable = async () => {
+        if (dataTableIsInitialized) {
+            dataTable.destroy();
+        }
+        await listaPonentes();
+        dataTable = $("#tablaponentes").DataTable(dataTableOptions);
+        dataTableIsInitialized = true;
+    };
+
+    const listaPonentes = async () => {
+        try {
+            const response = await fetch("/ponente/listar_ponentes_json");
+            const data = await response.json();
+            let content = '';
+            data.ponente.forEach((item_ponente) => {
+                const editUrl = `/ponente/edit/${item_ponente.idAlumno}/`;
+                content += `
+                    <tr>                            
+                        <td>${item_ponente.codigo}</td>                    
+                        <td>${item_ponente.nombre_ponente}</td>                                                           
+                        <td>${item_ponente.dni}</td>
+                        <td>${item_ponente.doctorado_maestria}</td>
+                        <td>${item_ponente.unidad}</td>                       
+                        <td>${item_ponente.mencion}</td>                 
+                        <td>
+                            <center>                       
+                                <a href="${editUrl}" class="btn btn-sm btn-success" style=" color: white;"><i class='fa fa-edit'></i></a>
+                                <button onclick="eliminarPonente(${item_ponente.idAlumno})" class='btn btn-sm btn-danger'><i class='fa-solid fa-trash-can'></i></button>                           
+                            </center>
+                        </td>
+                    </tr>`;
+            });
+            document.getElementById('tablebody_ponentes').innerHTML = content;
+        } catch (ex) {
+            console.error('Error al listar los ponentes:', ex);
+        }
+    };
+
+    window.addEventListener("load", async () => {
+        await initDataTable();
+    });
+</script>
+
+
+    <!-- Eliminar un usuario -->
+    <script>
+        function eliminarPonente(id){
+            Swal.fire({
+                title: "¿Realmente deseas eliminar este registro?",
+                text: "ID del Ponente: " + id,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#A19D9C',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'No, cancelar',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/ponente/delete/${id}/`;
+                }
+            });
+        }
+    </script>
+
+
+{% endblock %}
+

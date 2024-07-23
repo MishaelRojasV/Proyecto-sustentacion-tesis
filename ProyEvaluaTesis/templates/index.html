@@ -1,0 +1,255 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords"
+        content="wrappixel, admin dashboard, html css dashboard, web dashboard, bootstrap 5 admin, bootstrap 5, css3 dashboard, bootstrap 5 dashboard, AdminWrap lite admin bootstrap 5 dashboard, frontend, responsive bootstrap 5 admin template, AdminWrap lite design, AdminWrap lite dashboard bootstrap 5 dashboard template">
+    <meta name="description"
+        content="AdminWrap Lite is powerful and clean admin dashboard template, inpired from Bootstrap Framework">
+    <meta name="robots" content="noindex,nofollow">
+    <title> {% block title %} {% endblock %}</title>
+
+
+    <link rel="canonical" href="https://www.wrappixel.com/templates/adminwrap-lite/" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
+        integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static '/assets/images/favicon.png' %}">
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static '/assets/node_modules/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static '/assets/node_modules/perfect-scrollbar/css/perfect-scrollbar.css' %}" rel="stylesheet">
+    <!-- chartist CSS -->
+    <link href="{% static '/assets/node_modules/morrisjs/morris.css' %}" rel="stylesheet">
+    <!--c3 CSS -->
+    <link href="{% static '/assets/node_modules/c3-master/c3.min.css' %}" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{% static '/css/style.css' %}" rel="stylesheet">
+    <!-- Dashboard 1 Page CSS -->
+    <link href="{% static '/css/pages/dashboard1.css' %}" rel="stylesheet">
+    <!-- You can change the theme colors from here -->
+    <link href="{% static '/css/colors/default.css' %}" id="theme" rel="stylesheet">
+
+    <!-- Importacion de Boopstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    </script>
+
+    {% block css %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    {% endblock %}
+
+    <style>
+        .u-pro {
+    position: relative; /* Asegura que el menú desplegable se posicione correctamente */
+    /* Otros estilos */
+}
+        .dropdown-menu {
+        position: absolute;
+        z-index: 199000; /* Valor alto para asegurar que esté por encima de otros elementos */
+        /* Otros estilos */
+}
+    </style>
+
+</head>
+
+<body class="fix-header fix-sidebar card-no-border">
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+    <div class="preloader">
+        <div class="loader">
+            <div class="loader__figure"></div>
+            <p class="loader__label">Cargando...</p>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div id="main-wrapper">
+        <!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        <header class="topbar">
+            <nav class="navbar top-navbar navbar-expand-md navbar-light">
+                <!-- ============================================================== -->
+                <!-- Logo -->
+                <!-- ============================================================== -->
+                <div class="navbar-header " style="border-bottom: 1px solid #a5afbf; display: flex; justify-content: center;">
+                    <a class="navbar-brand mx-2" href="{% url 'home' %}" >
+                        <!-- Logo icon -->
+                        <b>
+                            <!-- Dark Logo icon -->
+                            <img src="{% static '/assets/images/logount.png' %}" alt="homepage" class="dark-logo" style="width: 65px;" />
+                            <!-- Light Logo icon -->
+                            <img src="{% static '/assets/images/logount.png' %}" alt="homepage" class="light-logo" style="width: 65px;" />
+                        </b>
+                        <!--End Logo icon -->
+                        <!-- Logo text -->
+                        <span><b> POSGRADO</b></span> 
+                        
+                    </a>
+                </div>
+                
+                <!-- ============================================================== -->
+                <!-- End Logo -->
+                <!-- ============================================================== -->
+                <div class="navbar-collapse">
+                    <!-- ============================================================== -->
+                    <!-- toggle and nav items -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"> <a class="nav-link nav-toggler waves-effect waves-dark"
+                                href="{% url 'home' %}"><i class="fa fa-bars"></i> HOME</a> </li>
+                        <!-- ============================================================== -->
+
+                    </ul>
+                    <!-- ============================================================== -->
+                    <!-- User profile and search -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav my-lg-0">
+                        <!-- ============================================================== -->
+                        <!-- Profile -->
+                        <!-- ============================================================== -->
+                        <li class="nav-item dropdown u-pro">
+                            <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" href="#"
+                                id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                <i class="fa-solid fa-circle-user fa-2xl" style="color: #577ab7;"></i>
+                                <span class="hidden-md-down"
+                                    style="text-transform: uppercase; display: inline-block; width: 120px;"><b>{{ request.user.username }}</b>&nbsp;</span>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <!-- <li><a class="dropdown-item" href=""><i class="fa-solid fa-address-card fa-lg"
+                                            style="color: #577ab7;"></i>&nbsp; Perfil de Usuario</a></li> -->
+                                <li><a class="dropdown-item" href="{% url 'logout' %}"><i
+                                            class="fa-solid fa-right-from-bracket fa-lg"
+                                            style="color: #577ab7;"></i>&nbsp; Salir</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- ============================================================== -->
+        <!-- End Topbar header -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <aside class="left-sidebar">
+            <!-- Sidebar scroll-->
+            <div class="scroll-sidebar">
+                <!-- Sidebar navigation-->
+                <nav class="sidebar-nav">
+                    <ul id="sidebarnav">
+                        <li> <a class="waves-effect waves-dark" href="{% url 'listar_usuarios' %}" aria-expanded="false"><i
+                                    class="fa-solid fa-users"></i></i><span class="hide-menu">Usuarios</span></a>
+                        </li>
+                        <li> <a class="waves-effect waves-dark" href="{% url 'listar_ponentes' %}"
+                                aria-expanded="false"><i class="fa-solid fa-graduation-cap"></i><span
+                                    class="hide-menu">Ponentes</span></a>
+                        </li>
+                        <li> <a class="waves-effect waves-dark" href="{% url 'listar_jurados' %}" aria-expanded="false"><i
+                                    class="fa-brands fa-black-tie"></i><span class="hide-menu">Jurados</span></a>
+                        </li>
+                        <li> <a class="waves-effect waves-dark" href="{% url 'listar_evaluaciones' %}"
+                                aria-expanded="false"><i class="fa fa-tachometer"></i><span
+                                    class="hide-menu">Sustentaciones</span></a>
+                        </li>
+                        <li> <a class="waves-effect waves-dark" href="{% url 'listar_detalleevaluaciones' %}" aria-expanded="false"><i
+                                    class="fa fa-tachometer"></i><span class="hide-menu">Detalle Sustentaciones</span></a>
+                        </li>
+                    </ul>
+                    <div class="text-center mt-4">
+                        <a style="width: 100%;" href="{% url 'logout' %}" class="btn waves-effect waves-light btn-info text-white"><i
+                                class="fa fa-sign-out" ></i> Salir</a>
+                    </div>
+                </nav>
+                <!-- End Sidebar navigation -->
+            </div>
+            <!-- End Sidebar scroll-->
+        </aside>
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Page wrapper  -->
+        <!-- ============================================================== -->
+        <div class="page-wrapper">
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                {% block content %}
+
+
+                {% endblock %}
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <footer class="footer"> © 2024 Posgrado by <a href="#">Mishael Rojas Valiente</a> </footer>
+            <!-- ============================================================== -->
+            <!-- End footer -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page wrapper  -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+
+
+    <script src="{% static '/assets/node_modules/jquery/jquery.min.js' %}"></script>
+    <!-- Bootstrap popper Core JavaScript -->
+    <script src="{% static '/assets/node_modules/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="{% static '/js/perfect-scrollbar.jquery.min.js' %}"></script>
+    <!--Wave Effects -->
+    <script src="{% static '/js/waves.js' %}"></script>
+    <!--Menu sidebar -->
+    <script src="{% static '/js/sidebarmenu.js' %}"></script>
+    <!--Custom JavaScript -->
+    <script src="{% static '/js/custom.min.js' %}"></script>
+    <!--morris JavaScript -->
+    <script src="{% static '/assets/node_modules/raphael/raphael-min.js' %}"></script>
+    <script src="{% static '/assets/node_modules/morrisjs/morris.min.js' %}"></script>
+    <!--c3 JavaScript -->
+    <script src="{% static '/assets/node_modules/d3/d3.min.js' %}"></script>
+    <script src="{% static '/assets/node_modules/c3-master/c3.min.js' %}"></script>
+    <!-- Chart JS -->
+    <script src="{% static 'js/dashboard1.js' %}"></script>
+
+    <!-- Importacion Scrpts de Boopstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
+    </script>
+
+    {% block js %}
+
+    {% endblock %}
+</body>
+
+</html>
