@@ -229,8 +229,8 @@ iframe {
 
 /*==================================================================
 [ login more ]*/
-.login100-more {
-  width: calc(100% - 560px);
+/* .login100-more {
+  width: calc(100% - 480px);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -243,12 +243,12 @@ iframe {
   display: block;
   position: absolute;
   z-index: -1;
-  width: 100%;
+  width: 80%;
   height: 100%;
   top: 0;
   left: 0;
   background: rgba(0,0,0,0.1);
-}
+} */
 
 
 
@@ -268,7 +268,7 @@ iframe {
   display: block;
   font-family: Poppins-Regular;
   font-size: 30px;
-  color: #1648be;
+  color: #333333;
   line-height: 1.2;
   text-align: center;
 }
@@ -286,8 +286,8 @@ iframe {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  width: 80%; /* Cambia esto al porcentaje o valor que prefieras */
-  height: 50px; /* Cambia esto a la altura que prefieras */
+  width: 100%;
+  height: 80px;
   position: relative;
   border: 1px solid #e6e6e6;
   border-radius: 10px;
@@ -299,13 +299,15 @@ iframe {
   font-size: 18px;
   color: #999999;
   line-height: 1.2;
+
   display: block;
   position: absolute;
   pointer-events: none;
   width: 100%;
   padding-left: 24px;
   left: 0;
-  top: 20px; /* Ajusta según sea necesario */
+  top: 30px;
+
   -webkit-transition: all 0.4s;
   -o-transition: all 0.4s;
   -moz-transition: all 0.4s;
@@ -314,22 +316,23 @@ iframe {
 
 .input100 {
   display: block;
-  width: 70%; /* Cambia esto al porcentaje o valor que prefieras */
+  width: 100%;
   background: transparent;
   font-family: Montserrat-Regular;
-  font-size: 14px; /* Ajusta según sea necesario */
+  font-size: 18px;
   color: #555555;
   line-height: 1.2;
-  padding: 0 20px;
+  padding: 0 26px;
 }
 
 input.input100 {
-  height: 40%; /* Cambia esto a la altura que prefieras */
+  height: 100%;
   -webkit-transition: all 0.4s;
   -o-transition: all 0.4s;
   -moz-transition: all 0.4s;
   transition: all 0.4s;
 }
+
 /*---------------------------------------------*/
 
 .focus-input100 {
@@ -475,7 +478,7 @@ input.input100 {
   width: 100%;
   height: 50px;
   border-radius: 10px;
-  background: rgb(32, 174, 227);
+  background: #6675df;
 
   font-family: Montserrat-Bold;
   font-size: 12px;
