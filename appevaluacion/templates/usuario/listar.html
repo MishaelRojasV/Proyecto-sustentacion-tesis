@@ -4,61 +4,78 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="row page-titles">
-    <div class="col-md-5 align-self-center">
-        <h3 class="text-themecolor"><b>LISTADO DE USUARIOS</b></h3>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-            <li class="breadcrumb-item active">Lista de usuarios</li>
-        </ol>
-    </div>   
-    <div class="col-md-7 d-flex align-self-center mr justify-content-end">  
-        <a href="{% url 'creacion_usuario' %}" class="btn waves-effect waves-light btn btn-info pull-right text-white"><i
-            class="fa fa-plus-square"></i> NUEVO</a>     
-    </div> 
-        
-</div>
-<div class="row">
-    <!-- column -->
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped" id="tablausuarios">
-                        <thead class="table-dark">
-                            <tr>                               
-                                <th >Id</th>
-                                <th>Nombres</th>                         
-                                <th>Username</th>
-                                <th>Password</th>                                  
-                                <th><center>Estado</center></th>                                  
-                                <th><center>Opciones</center></th>
-                            </tr>
-                        </thead>
-                        <tbody id="tablebody_usuarios">
-                        </tbody>                       
-                    </table>
+<div class="pcoded-content">
+    <!-- [ breadcrumb ] start -->
+    <div class="page-header">
+        <div class="page-block">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="page-header-title">
+                        <h5 class="m-b-10">USUARIOS</h5>
+                    </div>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item">Listado</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
+    <!-- [ breadcrumb ] end -->
+    <!-- [ Main Content ] start -->
+    <div class="row ">
+        <!-- customer-section start -->
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5>LISTADO DE USUARIOS</h5>    
+                    <a href="{% url 'creacion_usuario' %}" class="btn  btn-secondary btn-sm "><i class="fa fa-plus-square"></i> NUEVO</a>
+                                    
+                </div>
+                <div class="pro-scroll">
+                    <div class="card-body table-border-style">
+                        <div class="table-responsive">
+                            <table class="table table-sm my-3" id="tablausuarios" style="width:100%">
+                                <thead class="table">
+                                    <tr>                               
+                                        <th><center>Id</center></th>
+                                        <th><center>Nombres</center></th>                         
+                                        <th><center>Username</center></th>
+                                        <th><center>Correo</center></th>                                  
+                                        <th><center>Estado</center></th>                                  
+                                        <th><center>Opciones</center></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablebody_usuarios">
+                                </tbody>                       
+                            </table>        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- customer-section end -->
+    </div>
+    <!-- [ Main Content ] end -->
 </div>
-{% endblock content %}
 
+{% endblock content %}
 
 {% block js %}
 <!-- Libreria DAtatables.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
-<script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script> 
+<script src="https://cdn.datatables.net/2.1.2/js/dataTables.js"></script> 
+<script src="https://cdn.datatables.net/2.1.2/js/dataTables.bootstrap4.js"></script> 
 
 <!-- Libreria DAtatables.css -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
-<link rel="stylesheet" href=" https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap4.css">
 
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-   
+
     <!-- Mensaje de exito -->
     {% if messages %}
         {% for m in messages %}
@@ -74,8 +91,8 @@
     {% endif %}
 
 
-   <!-- Datatables -->
-   <script>
+    <!-- Datatables -->
+    <script>
         let dataTable;
         let dataTableIsInitialized = false;
 
@@ -87,18 +104,18 @@
             pageLength: 10,
             destroy: true,
             language:{
-                lengthMenu: "Mostrar _MENU_ registros por página",
+                lengthMenu: "Mostrar  _MENU_",
                 zeroRecords: "Ningun registro encontrado",
-                info: "Mostrando de _START_ a _END_ de un total de _TOTAL_ registros",
-                infoEmpty: "Ningún registro encontrado",
-                infoFiltered: "(filtrados desde _MAX_ registros totales)",
+                info: "",
+                infoEmpty: "",
+                infoFiltered: "",
                 search: "Buscar: ",
                 loadingRecords: "Cargando...",
                 paginate:{
-                    first: "Primero",
-                    last: "Ultimo",
-                    next: "Siguiente",
-                    previous: "Anterior"
+                    first: "<<",
+                    last: ">>",
+                    next: ">",
+                    previous: "<"
                 }
             },                                            
         };
@@ -126,9 +143,9 @@
                             <td><center>${item_usuario.id}</center></td>                    
                             <td>${item_usuario.first_name}  ${item_usuario.last_name}</td>                                                           
                             <td>${item_usuario.username}</td> 
-                            <td>${item_usuario.password}</td>
+                            <td>${item_usuario.email}</td>
                             <td>                       
-                                <center><span class="label label-info label-rounded" style="font-size:16px; ">${isActive}</span></center>
+                                <center><span class="badge badge-pill badge-primary" style="font-size:12px; ">${isActive}</span></center>
                             </td>
                             <td>
                                 <center>
@@ -174,4 +191,3 @@
       
    
 {% endblock %}
-
