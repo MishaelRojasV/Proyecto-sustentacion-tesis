@@ -5,69 +5,84 @@
 
 
 {% block content %}
-<!-- Bread crumb and right sidebar toggle -->
-<div class="row page-titles  m-4">
-    <div class="col-md-5 align-self-center">
-        <h3 class="text-themecolor"><b>MODIFICAR PONENTE</b></h3>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-            <li class="breadcrumb-item active">Modificar ponente</li>
-        </ol>
-    </div>            
-</div>
-<div class="row m-4">
-    <!-- column -->
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body m-3">
-                <form method="post" class="">
-                    {% csrf_token %}
-                    <div class="row px-5 py-3">           
-                        <!-- Ponentes -->
-                        <label for=""><strong>DATOS PERSONALES</strong></label>
-                        <hr>
-                        <div class="col-lg-12">                           
-                            <div class="row">                                
-                                <div class="col-lg-3">{{ form.codigo | as_crispy_field }}</div>     
-                                <div class="col-lg-3"></div>                                                                    
-                                <div class="col-lg-6">{{ form.nombre_ponente | as_crispy_field }}</div> 
-                            </div>    
-                            <div class="row">
-                                <div class="col-lg-6">{{ form.email | as_crispy_field }}</div>
-                                <div class="col-lg-3">{{ form.dni | as_crispy_field }}</div>
-                                <div class="col-lg-3">{{ form.ncelular | as_crispy_field }}</div>
-                            </div>                                
-                            <div class="row">
-                                <div class="col-lg-3">{{ form.doctorado_maestria | as_crispy_field }}</div>
-                                <div class="col-lg-4">{{ form.unidad | as_crispy_field }}</div>
-                                <div class="col-lg-5">{{ form.mencion | as_crispy_field }}</div>                                              
-                            </div>  
-                        </div> 
-                        <label for=""><strong>SUSTENTACIÓN</strong></label>
-                        <hr>   
-                        <div class="col-lg-12">
-                            <div class="row">
-                                <div class="col-lg-12">{{ form.ponencia | as_crispy_field }}</div>                                                            
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-2">{{ form.sala | as_crispy_field }}</div>
-                                <div class="col-lg-4">{{ form.fecha_sustentacion | as_crispy_field }}</div>
-                                <div class="col-lg-3">{{ form.hora_inicio_sustentacion | as_crispy_field }}</div>   
-                                <div class="col-lg-3">{{ form.hora_fin_sustentacion | as_crispy_field }}</div>                                              
-                            </div>         
-                        </div>
-                            
-                        <div class="col-lg-12">
-                            <div class="row mt-3">
-                                <div class="col-lg-6"><button type="submit" class="btn btn-info " style="width: 100%; color: white;"><b>GUARDAR</b></button></div>
-                                <div class="col-lg-6"><a href="{% url 'listar_ponentes' %}" class="btn" style="width: 100%; background-color: rgb(231, 237, 247);  color: black;"><b>CANCELAR</b></a></div>
-                            </div>
-                        </div>                         
-                    </div>                           
-                </form>   
+<div class="pcoded-content">
+
+    <div class="page-header">
+        <div class="page-block">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="page-header-title">
+                        <h5 class="m-b-10">POENENTES</h5>
+                    </div>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item">Actualizar</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
+
+
+    <!-- column -->
+    <div class="row">
+        <!-- column -->
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>NUEVO PONENTE</h5>                                    
+                </div>
+                <div class="card-body">
+                    <form method="post" class="">
+                        {% csrf_token %}
+                        <div class="row px-4 py-2">           
+                            <!-- Ponentes -->
+                            <div style="border-bottom: 1px solid black; width: 100%;"><label for=""><strong>DATOS PERSONALES</strong></label></div>
+                            <br>
+                            <div class="col-lg-12 mt-3">                           
+                                <div class="row">                                
+                                    <div class="col-lg-3">{{ form.codigo | as_crispy_field }}</div>     
+                                    <div class="col-lg-3"></div>                                                                    
+                                    <div class="col-lg-6">{{ form.nombre_ponente | as_crispy_field }}</div> 
+                                </div>    
+                                <div class="row">
+                                    <div class="col-lg-6">{{ form.email | as_crispy_field }}</div>
+                                    <div class="col-lg-3">{{ form.dni | as_crispy_field }}</div>
+                                    <div class="col-lg-3">{{ form.ncelular | as_crispy_field }}</div>
+                                </div>                                
+                                <div class="row">
+                                    <div class="col-lg-3">{{ form.doctorado_maestria | as_crispy_field }}</div>
+                                    <div class="col-lg-4">{{ form.unidad | as_crispy_field }}</div>
+                                    <div class="col-lg-5">{{ form.mencion | as_crispy_field }}</div>                                              
+                                </div>  
+                            </div> 
+                            <div style="border-bottom: 1px solid black; width: 100%;"><label for=""><strong>SUSTENTACIÓN</strong></label></div> 
+                            <hr>   
+                            <div class="col-lg-12 mt-3">
+                                <div class="row">
+                                    <div class="col-lg-12">{{ form.ponencia | as_crispy_field }}</div>                                                            
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-2">{{ form.sala | as_crispy_field }}</div>
+                                    <div class="col-lg-4">{{ form.fecha_sustentacion | as_crispy_field }}</div>
+                                    <div class="col-lg-3">{{ form.hora_inicio_sustentacion | as_crispy_field }}</div>   
+                                    <div class="col-lg-3">{{ form.hora_fin_sustentacion | as_crispy_field }}</div>                                              
+                                </div>         
+                            </div>
+                                
+                            <div class="col-lg-12">
+                                <div class="row mt-3">
+                                    <div class="col-lg-6 col-md-6 col-sm-12"><button type="submit" class="btn" style="width: 100%; background-color: #343a40; font-size: 12px; color: white;"><b>GUARDAR</b></button></div>
+                                    <div class="col-lg-6"><a href="{% url 'listar_ponentes' %}" class="btn" style="width: 100%; background-color: rgb(231, 237, 247); font-size: 12px; color: black;"><b>CANCELAR</b></a></div>
+                                </div>
+                            </div>                         
+                        </div>                           
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 {% endblock content %}

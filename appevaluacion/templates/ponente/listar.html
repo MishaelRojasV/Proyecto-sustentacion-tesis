@@ -4,46 +4,61 @@
 
 
 {% block content %}
-<!-- Bread crumb and right sidebar toggle -->
-<div class="row page-titles">
-    <div class="col-md-5 align-self-center">
-        <h3 class="text-themecolor"><b>LISTADO DE PONENTES</b></h3>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-            <li class="breadcrumb-item active">Lista de ponentes</li>
-        </ol>
-    </div>   
-    <div class="col-md-7 align-self-center mr">
-        <a href="{% url 'crear_ponente' %}" class="btn waves-effect waves-light btn btn-info pull-right text-white"><i
-                class="fa fa-plus-square"></i> NUEVO</a>      
-    </div> 
-        
-</div>
-<div class="row">
-    <!-- column -->
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped" id="tablaponentes">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>CODIGO</th>
-                                <th>DATOS DEL PONENTE</th>
-                                <th>DNI</th>
-                                <th>PROGRAMA</th>
-                                <th>UNIDADES</th>   
-                                <th>MENCIÓN</th>                                
-                                <th>ACCIONES</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tablebody_ponentes">
-                        </tbody>         
-                    </table>
+
+<div class="pcoded-content">
+    <!-- [ breadcrumb ] start -->
+    <div class="page-header">
+        <div class="page-block">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="page-header-title">
+                        <h5 class="m-b-10">PONENTES</h5>
+                    </div>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item">Listado</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
+    <!-- [ breadcrumb ] end -->
+        <!-- [ Main Content ] start -->
+        <div class="row ">
+            <!-- customer-section start -->
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5>LISTADO DE PONENTES</h5>    
+                        <a href="{% url 'crear_ponente' %}" class="btn  btn-secondary btn-sm "><i class="fa fa-plus-square"></i> NUEVO</a>
+                                        
+                    </div>
+                    <div class="pro-scroll">
+                        <div class="card-body table-border-style">
+                            <div class="table-responsive">
+                                <table class="table table-sm my-3" id="tablaponentes" style="width:100%">
+                                    <thead class="table">
+                                        <tr>                               
+                                            <th><center>Codigo</center></th>
+                                            <th><center>Datos del Ponente</center></th>                         
+                                            <th><center>Dni</center></th>
+                                            <th><center>Programa</center></th>                                  
+                                            <th><center>Unidad</center></th>                                  
+                                            <th><center>Mención</center></th>
+                                            <th><center>Acciones</center></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablebody_ponentes">
+                                    </tbody>                       
+                                </table>        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- customer-section end -->
+        </div>
+        <!-- [ Main Content ] end -->
 </div>
 
 {% endblock content %}
@@ -51,13 +66,14 @@
 
 {% block js %}
 <!-- Libreria DAtatables.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
-<script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://cdn.datatables.net/2.1.2/js/dataTables.js"></script> 
+<script src="https://cdn.datatables.net/2.1.2/js/dataTables.bootstrap4.js"></script> 
 
 <!-- Libreria DAtatables.css -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
-<link rel="stylesheet" href=" https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap4.css"> 
 
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -81,34 +97,29 @@
     let dataTable;
     let dataTableIsInitialized = false;
 
-    const dataTableOptions = {
-        columnDefs: [{
-                orderable: false,
-                targets: [2, 6]
-            },
-            {
-                searchable: false,
-                targets: [2, 6] 
-            }
-        ],
-        pageLength: 10,
-        destroy: true,
-        language: {
-            lengthMenu: "Mostrar _MENU_ registros por página",
-            zeroRecords: "Ningún registro encontrado",
-            info: "Mostrando de _START_ a _END_ de un total de _TOTAL_ registros",
-            infoEmpty: "Ningún registro encontrado",
-            infoFiltered: "(filtrados desde _MAX_ registros totales)",
-            search: "Buscar: ",
-            loadingRecords: "Cargando...",
-            paginate: {
-                first: "Primero",
-                last: "Último",
-                next: "Siguiente",
-                previous: "Anterior"
-            }
-        }
-    };
+    const dataTableOptions = {        
+            columnDefs: [               
+                { orderable: false, targets: [2, 6]},
+                { searchable: false, targets: [3, 4, 5, 6] }
+            ],
+            pageLength: 10,
+            destroy: true,
+            language:{
+                lengthMenu: "Mostrar  _MENU_",
+                zeroRecords: "Ningun registro encontrado",
+                info: "",
+                infoEmpty: "",
+                infoFiltered: "",
+                search: "Buscar: ",
+                loadingRecords: "Cargando...",
+                paginate:{
+                    first: "<<",
+                    last: ">>",
+                    next: ">",
+                    previous: "<"
+                }
+            },                                            
+        };
 
     const initDataTable = async () => {
         if (dataTableIsInitialized) {

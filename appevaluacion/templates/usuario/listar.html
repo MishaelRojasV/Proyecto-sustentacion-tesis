@@ -43,7 +43,7 @@
                                         <th><center>Username</center></th>
                                         <th><center>Correo</center></th>                                  
                                         <th><center>Estado</center></th>                                  
-                                        <th><center>Opciones</center></th>
+                                        <th><center>Acciones</center></th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablebody_usuarios">
@@ -65,13 +65,12 @@
 <!-- Libreria DAtatables.js -->
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script> 
 <script src="https://cdn.datatables.net/2.1.2/js/dataTables.js"></script> 
 <script src="https://cdn.datatables.net/2.1.2/js/dataTables.bootstrap4.js"></script> 
 
 <!-- Libreria DAtatables.css -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap4.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap4.css"> 
 
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -132,7 +131,7 @@
 
         const listaUsuarios = async (estado) => {
             try {
-                const response = await fetch("/usuarios/listar_usuarios_json?estado=" + estado);
+                const response = await fetch("/usuarios/listar_usuarios_json");
                 const data = await response.json();
                 let content = ``;
                 data.usuarios.forEach((item_usuario) => {
@@ -145,7 +144,7 @@
                             <td>${item_usuario.username}</td> 
                             <td>${item_usuario.email}</td>
                             <td>                       
-                                <center><span class="badge badge-pill badge-primary" style="font-size:12px; ">${isActive}</span></center>
+                                <center><span class="badge badge-pill badge-info" style="font-size:12px; ">${isActive}</span></center>
                             </td>
                             <td>
                                 <center>
@@ -188,6 +187,5 @@
             });
         }
     </script>
-      
-   
+
 {% endblock %}
