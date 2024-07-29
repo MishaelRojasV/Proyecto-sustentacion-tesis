@@ -116,7 +116,6 @@ class JuradosForm(forms.ModelForm):
             'user',
             'nombre_jurado',            
             'dni',
-            'cargo',
             'email',
             'telefono',           
         ]
@@ -130,7 +129,6 @@ class JuradosForm(forms.ModelForm):
             'user': 'Nombre de Usuario',
             'nombre_jurado': 'Nombre del jurado',
             'dni': 'Dni',
-            'cargo': 'Cargo',
             'email': 'Email',
             'telefono': 'Telefono/Celular',   
         }

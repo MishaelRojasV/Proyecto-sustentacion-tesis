@@ -28,8 +28,8 @@ class Alumno(models.Model):
         return f'{self.nombre_ponente}'
     
 CARGO = (('Presidente','Presidente'),
-         ('Secretario','Secretario'),
-         ('Vocal','Vocal'))
+        ('Secretario','Secretario'),
+        ('Vocal','Vocal'))
 
 
 class Jurado(models.Model):
@@ -37,7 +37,7 @@ class Jurado(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     nombre_jurado = models.CharField(max_length=200, null=False)  
     dni  = models.CharField(max_length=20, null=True, unique=True)
-    cargo = models.CharField(max_length=20, choices=CARGO)
+    #cargo = models.CharField(max_length=20, choices=CARGO)
     email = models.EmailField(max_length=100, blank=True, null=True)
     telefono = models.CharField(max_length=10, null=True)
     fecha_creacion = models.DateTimeField(auto_now=True)
