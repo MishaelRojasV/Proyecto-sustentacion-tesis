@@ -1,255 +1,185 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
+    <title>Posgrado - UNT</title>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords"
-        content="wrappixel, admin dashboard, html css dashboard, web dashboard, bootstrap 5 admin, bootstrap 5, css3 dashboard, bootstrap 5 dashboard, AdminWrap lite admin bootstrap 5 dashboard, frontend, responsive bootstrap 5 admin template, AdminWrap lite design, AdminWrap lite dashboard bootstrap 5 dashboard template">
-    <meta name="description"
-        content="AdminWrap Lite is powerful and clean admin dashboard template, inpired from Bootstrap Framework">
-    <meta name="robots" content="noindex,nofollow">
-    <title> {% block title %} {% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="">
+    <meta name="author" content="Phoenixcoded" />
 
-
-    <link rel="canonical" href="https://www.wrappixel.com/templates/adminwrap-lite/" />
-
-    <!-- Font Awesome -->
+    <!-- Font awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
         integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static '/assets/images/favicon.png' %}">
-    <!-- Bootstrap Core CSS -->
-    <link href="{% static '/assets/node_modules/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static '/assets/node_modules/perfect-scrollbar/css/perfect-scrollbar.css' %}" rel="stylesheet">
-    <!-- chartist CSS -->
-    <link href="{% static '/assets/node_modules/morrisjs/morris.css' %}" rel="stylesheet">
-    <!--c3 CSS -->
-    <link href="{% static '/assets/node_modules/c3-master/c3.min.css' %}" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link href="{% static '/css/style.css' %}" rel="stylesheet">
-    <!-- Dashboard 1 Page CSS -->
-    <link href="{% static '/css/pages/dashboard1.css' %}" rel="stylesheet">
-    <!-- You can change the theme colors from here -->
-    <link href="{% static '/css/colors/default.css' %}" id="theme" rel="stylesheet">
+    <link rel="icon" href="{% static '/assets/images/favicon.svg' %}" type="image/x-icon">
 
-    <!-- Importacion de Boopstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-    </script>
+    <!-- font css -->
+    <link rel="stylesheet" href="{% static '/assets/fonts/font-awsome-pro/css/pro.min.css' %}">
+    <link rel="stylesheet" href="{% static '/assets/fonts/feather.css' %}">
+    <link rel="stylesheet" href="{% static '/assets/fonts/fontawesome.css' %}">
 
-    {% block css %}
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-    {% endblock %}
-
-    <style>
-        .u-pro {
-    position: relative; /* Asegura que el menú desplegable se posicione correctamente */
-    /* Otros estilos */
-}
-        .dropdown-menu {
-        position: absolute;
-        z-index: 199000; /* Valor alto para asegurar que esté por encima de otros elementos */
-        /* Otros estilos */
-}
-    </style>
-
+    <!-- vendor css -->
+    <link rel="stylesheet" href="{% static '/assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static '/assets/css/customizer.css' %}">
 </head>
+<body class="">
+    
+	<!-- [ Pre-loader ] start -->
+	<div class="loader-bg">
+		<div class="loader-track">
+			<div class="loader-fill"></div>
+		</div>
+	</div>
+	<!-- [ Pre-loader ] End -->
 
-<body class="fix-header fix-sidebar card-no-border">
-    <!-- ============================================================== -->
-    <!-- Preloader - style you can find in spinners.css -->
-    <!-- ============================================================== -->
-    <div class="preloader">
-        <div class="loader">
-            <div class="loader__figure"></div>
-            <p class="loader__label">Cargando...</p>
-        </div>
-    </div>
-    <!-- ============================================================== -->
-    <!-- Main wrapper - style you can find in pages.scss -->
-    <!-- ============================================================== -->
-    <div id="main-wrapper">
-        <!-- ============================================================== -->
-        <!-- Topbar header - style you can find in pages.scss -->
-        <!-- ============================================================== -->
-        <header class="topbar">
-            <nav class="navbar top-navbar navbar-expand-md navbar-light">
-                <!-- ============================================================== -->
-                <!-- Logo -->
-                <!-- ============================================================== -->
-                <div class="navbar-header " style="border-bottom: 1px solid #a5afbf; display: flex; justify-content: center;">
-                    <a class="navbar-brand mx-2" href="{% url 'home' %}" >
-                        <!-- Logo icon -->
-                        <b>
-                            <!-- Dark Logo icon -->
-                            <img src="{% static '/assets/images/logount.png' %}" alt="homepage" class="dark-logo" style="width: 65px;" />
-                            <!-- Light Logo icon -->
-                            <img src="{% static '/assets/images/logount.png' %}" alt="homepage" class="light-logo" style="width: 65px;" />
-                        </b>
-                        <!--End Logo icon -->
-                        <!-- Logo text -->
-                        <span><b> POSGRADO</b></span> 
-                        
-                    </a>
-                </div>
-                
-                <!-- ============================================================== -->
-                <!-- End Logo -->
-                <!-- ============================================================== -->
-                <div class="navbar-collapse">
-                    <!-- ============================================================== -->
-                    <!-- toggle and nav items -->
-                    <!-- ============================================================== -->
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item"> <a class="nav-link nav-toggler waves-effect waves-dark"
-                                href="{% url 'home' %}"><i class="fa fa-bars"></i> HOME</a> </li>
-                        <!-- ============================================================== -->
+	<!-- [ Mobile header ] start -->
+	<div class="pc-mob-header pc-header">
+		<div class="pcm-logo">
+			<img style="height: 60px; width: 190px;" src="{% static '/assets/images/logo_postgrado.png' %}" alt="" class="logo logo-lg">
+		</div>
+		<div class="pcm-toolbar">
+			<a href="#!" class="pc-head-link" id="mobile-collapse">
+				<div class="hamburger hamburger--arrowturn">
+					<div class="hamburger-box">
+						<div class="hamburger-inner"></div>
+					</div>
+				</div>
+				<!-- <i data-feather="menu"></i> -->
+			</a>
 
-                    </ul>
-                    <!-- ============================================================== -->
-                    <!-- User profile and search -->
-                    <!-- ============================================================== -->
-                    <ul class="navbar-nav my-lg-0">
-                        <!-- ============================================================== -->
-                        <!-- Profile -->
-                        <!-- ============================================================== -->
-                        <li class="nav-item dropdown u-pro">
-                            <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" href="#"
-                                id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                                <i class="fa-solid fa-circle-user fa-2xl" style="color: #577ab7;"></i>
-                                <span class="hidden-md-down"
-                                    style="text-transform: uppercase; display: inline-block; width: 120px;"><b>{{ request.user.username }}</b>&nbsp;</span>
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <!-- <li><a class="dropdown-item" href=""><i class="fa-solid fa-address-card fa-lg"
-                                            style="color: #577ab7;"></i>&nbsp; Perfil de Usuario</a></li> -->
-                                <li><a class="dropdown-item" href="{% url 'logout' %}"><i
-                                            class="fa-solid fa-right-from-bracket fa-lg"
-                                            style="color: #577ab7;"></i>&nbsp; Salir</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </header>
-        <!-- ============================================================== -->
-        <!-- End Topbar header -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Left Sidebar - style you can find in sidebar.scss  -->
-        <!-- ============================================================== -->
-        <aside class="left-sidebar">
-            <!-- Sidebar scroll-->
-            <div class="scroll-sidebar">
-                <!-- Sidebar navigation-->
-                <nav class="sidebar-nav">
-                    <ul id="sidebarnav">
-                        <li> <a class="waves-effect waves-dark" href="{% url 'listar_usuarios' %}" aria-expanded="false"><i
-                                    class="fa-solid fa-users"></i></i><span class="hide-menu">Usuarios</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="{% url 'listar_ponentes' %}"
-                                aria-expanded="false"><i class="fa-solid fa-graduation-cap"></i><span
-                                    class="hide-menu">Ponentes</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="{% url 'listar_jurados' %}" aria-expanded="false"><i
-                                    class="fa-brands fa-black-tie"></i><span class="hide-menu">Jurados</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="{% url 'listar_evaluaciones' %}"
-                                aria-expanded="false"><i class="fa fa-tachometer"></i><span
-                                    class="hide-menu">Sustentaciones</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="{% url 'listar_detalleevaluaciones' %}" aria-expanded="false"><i
-                                    class="fa fa-tachometer"></i><span class="hide-menu">Detalle Sustentaciones</span></a>
-                        </li>
-                    </ul>
-                    <div class="text-center mt-4">
-                        <a style="width: 100%;" href="{% url 'logout' %}" class="btn waves-effect waves-light btn-info text-white"><i
-                                class="fa fa-sign-out" ></i> Salir</a>
-                    </div>
-                </nav>
-                <!-- End Sidebar navigation -->
-            </div>
-            <!-- End Sidebar scroll-->
-        </aside>
-        <!-- ============================================================== -->
-        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Page wrapper  -->
-        <!-- ============================================================== -->
-        <div class="page-wrapper">
-            <!-- ============================================================== -->
-            <!-- Container fluid  -->
-            <!-- ============================================================== -->
-            <div class="container-fluid">
-                {% block content %}
+			<a href="#!" class="pc-head-link" id="header-collapse">
+				<i data-feather="more-vertical"></i>
+			</a>
+		</div>
+	</div>
+	<!-- [ Mobile header ] End -->
 
+	<!-- [ navigation menu ] start -->
+	<nav class="pc-sidebar ">
+		<div class="navbar-wrapper">
+			<div class="m-header">
+				<a href="{% url 'home' %}" class="b-brand">
+					<!-- ========   change your logo hear   ============ -->
+					<img style="height: 60px; width: 190px;" src="{% static '/assets/images/logo_postgrado.png' %}" alt="" class="logo logo-lg">
+					<!-- <img src="{% static '/assets/images/logo-sm.svg' %}" alt="" class="logo logo-sm"> -->
+				</a>
+			</div>
+			<div class="navbar-content">
+				<ul class="pc-navbar">
+					<li class="pc-item pc-caption">
+						<label>Navigation</label>
+					</li>
+					<li class="pc-item">
+						<a href="{% url 'home' %}" class="pc-link "><span class="pc-micon"><i data-feather="home"></i></span><span class="pc-mtext">Home</span></a>
+					</li>
+					<li class="pc-item pc-caption">
+						<label>Registros</label>
+					</li>
+					<li class="pc-item">
+						<a href="{% url 'listar_usuarios' %}" class="pc-link "><span class="pc-micon"><i class="fa-solid fa-users"></i></span><span class="pc-mtext"> Usuarios</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span></a>
+					</li>
+					<li class="pc-item">
+						<a href="{% url 'listar_ponentes' %}" class="pc-link "><span class="pc-micon"><i class="fa-solid fa-graduation-cap"></i></span><span class="pc-mtext">Ponentes</span></a>
+					</li>
+                    <li class="pc-item">
+						<a href="{% url 'listar_jurados' %}" class="pc-link "><span class="pc-micon"><i class="fa-brands fa-black-tie"></i></span><span class="pc-mtext"> Jurados</span></a>
+					</li>
+                    <li class="pc-item pc-caption">
+						<label>Evaluación</label>
+					</li>
+                    <li class="pc-item">
+						<a href="{% url 'listar_evaluaciones' %}" class="pc-link "><span class="pc-micon"><i class="fa-regular fa-file-lines"></i></span><span class="pc-mtext">Sustentaciones</span></a>
+					</li>
+                    <li class="pc-item">
+						<a href="{% url 'listar_detalleevaluaciones' %}" class="pc-link "><span class="pc-micon"><i class="fa-solid fa-table-cells-large"></i></span><span class="pc-mtext">Detalle sustentaciones</span></a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<!-- [ navigation menu ] end -->
+    
+	<!-- [ Header ] start -->
+	<header class="pc-header ">
+		<div class="header-wrapper">
+			<div class="mr-auto pc-mob-drp">
+				<ul class="list-unstyled">
+					<li class="dropdown pc-h-item">
+						<div class="dropdown-menu pc-h-dropdown">
+							<a href="#!" class="dropdown-item">
+								<i data-feather="user"></i>
+								<span>Mi cuenta</span>
+							</a>
+							<a href="{% url 'logout' %}" class="dropdown-item">
+								<i data-feather="power"></i>
+								<span>Salir</span>
+							</a>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="ml-auto">
+				<ul class="list-unstyled">
+					<li class="dropdown pc-h-item">
+						<a class="pc-head-link dropdown-toggle arrow-none mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+							<img src="{% static '/assets/images/user/avatar.png' %}" alt="user-image" class="user-avtar">
+							<span>
+								<span class="user-name" style="text-transform: uppercase;">{{ request.user.username }}</span>
+								<span class="user-desc">Administrator</span>
+							</span>
+						</a>
+						<div class="dropdown-menu dropdown-menu-right pc-h-dropdown">
+							<div class=" dropdown-header">
+								<h6 class="text-overflow m-0">Bienvenido !</h6>
+							</div>
+							<a href="#!" class="dropdown-item">
+								<i data-feather="user"></i>
+								<span>Mi cuenta</span>
+							</a>
+							<a href="{% url 'logout' %}" class="dropdown-item">
+								<i data-feather="power"></i>
+								<span>Salir</span>
+							</a>
+						</div>
+					</li>
+				</ul>
+			</div>
 
-                {% endblock %}
-            </div>
-            <!-- ============================================================== -->
-            <!-- End Container fluid  -->
-            <!-- ============================================================== -->
-            <!-- ============================================================== -->
-            <!-- footer -->
-            <!-- ============================================================== -->
-            <footer class="footer"> © 2024 Posgrado by <a href="#">Mishael Rojas Valiente</a> </footer>
-            <!-- ============================================================== -->
-            <!-- End footer -->
-            <!-- ============================================================== -->
-        </div>
-        <!-- ============================================================== -->
-        <!-- End Page wrapper  -->
-        <!-- ============================================================== -->
-    </div>
-    <!-- ============================================================== -->
-    <!-- End Wrapper -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- All Jquery -->
-    <!-- ============================================================== -->
+		</div>
+	</header>
+	<!-- [ Header ] end -->
 
+<!-- [ Main Content ] start -->
+<div class="pc-container">
+    {% block content %}{% endblock %}
+</div>
+<!-- [ Main Content ] end -->
+</div>
 
-    <script src="{% static '/assets/node_modules/jquery/jquery.min.js' %}"></script>
-    <!-- Bootstrap popper Core JavaScript -->
-    <script src="{% static '/assets/node_modules/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <!-- slimscrollbar scrollbar JavaScript -->
-    <script src="{% static '/js/perfect-scrollbar.jquery.min.js' %}"></script>
-    <!--Wave Effects -->
-    <script src="{% static '/js/waves.js' %}"></script>
-    <!--Menu sidebar -->
-    <script src="{% static '/js/sidebarmenu.js' %}"></script>
-    <!--Custom JavaScript -->
-    <script src="{% static '/js/custom.min.js' %}"></script>
-    <!--morris JavaScript -->
-    <script src="{% static '/assets/node_modules/raphael/raphael-min.js' %}"></script>
-    <script src="{% static '/assets/node_modules/morrisjs/morris.min.js' %}"></script>
-    <!--c3 JavaScript -->
-    <script src="{% static '/assets/node_modules/d3/d3.min.js' %}"></script>
-    <script src="{% static '/assets/node_modules/c3-master/c3.min.js' %}"></script>
-    <!-- Chart JS -->
-    <script src="{% static 'js/dashboard1.js' %}"></script>
+<!-- <footer class="footer"> © 2024 Posgrado by <a href="#">Mishael Rojas Valiente</a> </footer>
+ -->
 
-    <!-- Importacion Scrpts de Boopstrap -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
-        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
-        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
-    </script>
+    <!-- Required Js -->
+    <script src="{% static '/assets/js/vendor-all.min.js' %}"></script>
+    <script src="{% static '/assets/js/plugins/bootstrap.min.js' %}"></script> 
+    <script src="{% static '/assets/js/plugins/feather.min.js' %}"></script>
+    <script src="{% static '/assets/js/pcoded.min.js' %}"></script> 
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js'"></script> -->
+    <script src="{% static '/assets/js/plugins/clipboard.min.js' %}"></script>
+    <!-- <script src="{% static '/assets/js/uikit.min.js' %}"></script> -->
 
-    {% block js %}
+<!-- Apex Chart -->
+<script src="{% static '/assets/js/plugins/apexcharts.min.js' %}"></script>
+<!-- <script>
+    $("body").append('<div class="fixed-button active"><a href="https://1.envato.market/VGznk" target="_blank" class="btn btn-md btn-success"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Upgrade To Pro</a> </div>');
+</script> -->
 
-    {% endblock %}
+<!-- custom-chart js -->
+<!-- <script src="{% static '/assets/js/pages/dashboard-sale.js' %}"></script> -->
 </body>
-
 </html>
