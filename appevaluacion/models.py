@@ -92,6 +92,7 @@ class DetalleEvaluacion(models.Model):
     idDetEvaluacion = models.AutoField(primary_key=True, null = False)
     evaluacion = models.ForeignKey(Evaluacion, on_delete = models.CASCADE, null = False)
     jurado = models.ForeignKey(Jurado, on_delete = models.CASCADE, null = False)
+    cargo = models.CharField(max_length=20, null = False)
     alumno = models.ForeignKey(Alumno, on_delete = models.CASCADE, null = False)
     originalidad = models.IntegerField(choices=ORIGINALIDAD_CHOICES, default=1)
     importancia = models.IntegerField(choices=IMPORTANCIA_CHOICES, default=1)

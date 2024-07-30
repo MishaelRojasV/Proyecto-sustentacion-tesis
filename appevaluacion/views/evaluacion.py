@@ -9,10 +9,10 @@ from django.contrib import messages
 #---------------------------------------------Listar Evaluaciones---------------------------------------------
 @login_required(login_url='login')
 def listar_evaluaciones(request): 
-    jurados_presidente = Jurado.objects.filter(cargo='Presidente').filter(eliminado=False)
-    jurados_secretario = Jurado.objects.filter(cargo='Secretario').filter(eliminado=False)
-    jurados_vocal = Jurado.objects.filter(cargo='Vocal').filter(eliminado=False)
-    return render(request, "evaluacion/listar.html", {'jurados_presidente':jurados_presidente,'jurados_secretario':jurados_secretario,'jurados_vocal':jurados_vocal})
+    #jurados_presidente = Jurado.objects.filter(cargo='Presidente').filter(eliminado=False)
+    #jurados_secretario = Jurado.objects.filter(cargo='Secretario').filter(eliminado=False)
+    #jurados_vocal = Jurado.objects.filter(cargo='Vocal').filter(eliminado=False)
+    return render(request, "evaluacion/listar.html", {})
 
 @login_required(login_url='login')
 def listar_evaluacion_json(_request):    
@@ -24,17 +24,36 @@ def listar_evaluacion_json(_request):
 #---------------------------------------------Crear Evaluaciones---------------------------------------------
 @login_required(login_url='login')
 def crear_evaluacion(request):
+
+    list_jurados = Jurado.objects.filter(eliminado=False).values()
+
     if request.method == 'POST':
         form = EvaluacionForm(request.POST)
         if form.is_valid():       
-            form.save()             
+            evaluacion = form.save()             
             messages.success(request, f'Evaluacion Creada Exitosamente')
+
+            # Obtener los IDs de los jurados seleccionados
+            selected_jurados_ids = request.POST.get('selectedJurados', '')
+            selected_jurados_ids = selected_jurados_ids.split(',')
+            
+            # Crear detalles de evaluación solo para los jurados seleccionados
+            for id_jurado in selected_jurados_ids:
+                cargo = request.POST.get(f'cargo_{id_jurado}')
+                if id_jurado:
+                    DetalleEvaluacion.objects.create(
+                        evaluacion=evaluacion,
+                        jurado=Jurado.objects.get(idJurado=id_jurado),
+                        cargo=cargo,
+                        alumno=form.cleaned_data['alumno']
+                    )
+
             return redirect('listar_evaluaciones')
         else:
             messages.error(request, "El formulario contiene errores. Por favor, corrija")
     else:
         form = EvaluacionForm()
-    return render(request, 'evaluacion/agregar.html', {'form': form})
+    return render(request, 'evaluacion/agregar.html', {'form': form, 'list_jurados':list_jurados})
 
 
 #---------------------------------------------Editar Evaluacion---------------------------------------------

@@ -3,140 +3,196 @@
 {% load static %}
 
 {% block css %}
-
 <!-- Bootstrap CSS -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 <!-- Select2 CSS -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-
-<style>
-    .select2-container {
-        z-index: 9999;
-    }
-
-    .select2-dropdown {
-        z-index: 99999;
-    }
-</style>
-
 {% endblock %}
 
 {% block content %}
-<!-- Bread crumb and right sidebar toggle -->
-<div class="row page-titles">
-    <div class="col-md-5 align-self-center">
-        <h3 class="text-themecolor"><b>DETALLE DE EVALUACIONES</b></h3>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-            <li class="breadcrumb-item active">Detalle de sustentaciones</li>
-        </ol>
-    </div>
-    <!-- <div class="col-md-7 align-self-center mr">
-        <a href="" class="btn waves-effect waves-light btn btn-info pull-right text-white"><i
-                class="fa fa-plus-square"></i> Nuevo</a>      
-    </div> -->
-
-</div>
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped" id="tabladetallesustentaciones">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>PONENTE</th>
-                                <th>JURADO</th>
-                                <th>ORIGINALIDAD</th>
-                                <th>IMPORTANCIA</th>
-                                <th>COHERENCIA</th>
-                                <th>METODOLOGIA</th>
-                                <th>VALIDEZ</th>
-                                <th>DOMINIO TEMA</th>
-                                <th>PUNTAJE FINAL</th>
-                                <th>ACCIONES</th>
-                            </tr>
-                        </thead>
-                        {% if page_obj %}
-                        {% for item_evaluacion in page_obj %}
-                        <tr>
-                            <td>{{ item_evaluacion.alumno}}</td>
-                            <td>{{ item_evaluacion.jurado}}</td>
-                            <td>{{ item_evaluacion.originalidad }}</td>                    
-                            <td>{{ item_evaluacion.importancia }}</td>
-                            <td>{{ item_evaluacion.coherencia }}</td>
-                            <td>{{ item_evaluacion.metodologia }}</td>
-                            <td>{{ item_evaluacion.validez }}</td>
-                            <td>{{ item_evaluacion.dominio_tema }}</td>
-                            <td>{{ item_evaluacion.puntajeFinal }}</td>
-                            <td style="text-align: center;">                           
-                                <a href="{% url 'evaluar_sustentacion' item_evaluacion.idDetEvaluacion %}" onclick="" class="btn btn-secondary btn-sm"><i class="fa-solid fa-eye"></i></a>
-                            </td>                    
-                        </tr>
-                        {% endfor %}                 
-                        {% else %}                
-                        <tr style="text-align: center;">
-                            <td colspan="10">
-                                <p>No hay Registros</p>
-                            </td>
-                        </tr>
-                        {% endif %}
-                    </table>
+<div class="pcoded-content">
+    <!-- [ breadcrumb ] start -->
+    <div class="page-header">
+        <div class="page-block">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="page-header-title">
+                        <h5 class="m-b-10">DETALLE</h5>
+                    </div>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item">Listado</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
+    <!-- [ breadcrumb ] end -->
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>ITEMS DE EVALUACIÓN | Leyenda</h5>  
+                </div>
+                <div class="card-body">
+                    <div type="button" class="btn btn-sm btn-primary"><span class="badge badge-light-primary">1</span> ORIGINALIDAD</div>
+                    <div type="button" class="btn btn-sm btn-secondary"><span class="badge badge-light-secondary">2</span> IMPORTANCIA</div>
+                    <div type="button" class="btn btn-sm btn-success"><span class="badge badge-light-success">3</span> COHERENCIA</div>
+                    <div type="button" class="btn btn-sm btn-danger"><span class="badge badge-light-danger">4</span> METODOLOGIA</div>
+                    <div type="button" class="btn btn-sm btn-warning"><span class="badge badge-light-warning">5</span> VALIDEZ</div>
+                    <div type="button" class="btn btn-sm btn-info"><span class="badge badge-light-info">6</span> DOMINIO TEMA</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>FILTROS</h5>  
+                </div>
+                <div class="card-body">
+                    <form method="get" action="{% url 'listar_detalleevaluaciones' %}">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="ponente">Ponente</label>
+                                    <input type="text" class="form-control" id="ponente" name="ponente" placeholder="Buscar por ponente" value="{{ request.GET.ponente }}">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="jurado">Jurado</label>
+                                    <input type="text" class="form-control" id="jurado" name="jurado" placeholder="Buscar por jurado" value="{{ request.GET.jurado }}">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="cargo">Cargo</label>
+                                    <select class="form-control" id="cargo" name="cargo">
+                                        <option value="">Seleccionar cargo</option>
+                                        <option value="Presidente" {% if request.GET.cargo == 'Presidente' %}selected{% endif %}>Presidente</option>
+                                        <option value="Secretario" {% if request.GET.cargo == 'Secretario' %}selected{% endif %}>Secretario</option>
+                                        <option value="Vocal" {% if request.GET.cargo == 'Vocal' %}selected{% endif %}>Vocal</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Filtrar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- [ Main Content ] start -->
+    <div class="row ">
+        <!-- customer-section start -->
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="my-2">DETALLE DE SUSTENTACIONES</h5>                                       
+                </div>
+                <div class="pro-scroll">
+                    <div class="card-body table-border-style">
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="tabladetallesustentaciones">
+                                <thead class="table table-sm my-3">
+                                    <tr>
+                                        <th><center>PONENTE</center></th>
+                                        <th><center>JURADO</center></th>
+                                        <th><center>CARGO</center></th>
+                                        <th><center><span style="font-size: 18px;" class="badge badge-light-primary">1</span</center></th>
+                                        <th><center><span style="font-size: 18px;" class="badge badge-light-secondary">2</span></center></th>
+                                        <th><center><span style="font-size: 18px;" class="badge badge-light-success">3</span></center></th>
+                                        <th><center><span style="font-size: 18px;" class="badge badge-light-danger">4</span></center></th>
+                                        <th><center><span style="font-size: 18px;" class="badge badge-light-warning">5</span></center></th>
+                                        <th><center><span style="font-size: 18px;" class="badge badge-light-info">6</span></center></th>
+                                        <th><center>PUNTAJE FINAL</center></th>
+                                        <th><center>ACCIONES</center></th>
+                                    </tr>
+                                </thead>
+                                {% if page_obj %}
+                                {% for item_evaluacion in page_obj %}
+                                <tr>
+                                    <td>{{ item_evaluacion.alumno}}</td>
+                                    <td>{{ item_evaluacion.jurado}}</td>                                    
+                                    <td>
+                                        {% if item_evaluacion.cargo == "Presidente" %}
+                                            <center><span class="badge badge-pill badge-light-primary" style="font-size: 14px;">{{ item_evaluacion.cargo}}</span></center>
+                                        {% endif %}
+                                        {% if item_evaluacion.cargo == "Secretario" %}
+                                            <center><span class="badge badge-pill badge-light-info" style="font-size: 14px;">{{ item_evaluacion.cargo}}</span></center>  
+                                        {% endif %}
+                                        {% if item_evaluacion.cargo == "Vocal" %}
+                                            <center><span class="badge badge-pill badge-light-success" style="font-size: 14px;">{{ item_evaluacion.cargo}}</span></center>         
+                                        {% endif %}
+                                    </td>
+                                    <td><center>{{ item_evaluacion.originalidad }}</center></td>                    
+                                    <td><center>{{ item_evaluacion.importancia }}</center></td>
+                                    <td><center>{{ item_evaluacion.coherencia }}</center></td>
+                                    <td><center>{{ item_evaluacion.metodologia }}</center></td>
+                                    <td><center>{{ item_evaluacion.validez }}</center></td>
+                                    <td><center>{{ item_evaluacion.dominio_tema }}</center></td>
+                                    <td><center>{{ item_evaluacion.puntajeFinal }}</center></td>
+                                    <td style="text-align: center;">                           
+                                        <a href="{% url 'evaluar_sustentacion' item_evaluacion.idDetEvaluacion %}" onclick="" class="btn btn-secondary btn-sm"><i class="fa-solid fa-eye"></i></a>
+                                    </td>                    
+                                </tr>
+                                {% endfor %}                 
+                                {% else %}                
+                                <tr style="text-align: center;">
+                                    <td colspan="11">
+                                        <p>No hay Registros</p>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            </table>       
+                        </div>
+                        <div class="card-footer">           
+                            <div class="d-flex justify-content-end pt-2">
+                                <nav aria-label="pagination-django">
+                                    <ul class="pagination">
+                                        {% if page_obj.has_previous %}                    
+                                            <li class="page-item"><a class="page-link" href="?page=1">Primera</a></li>
+                                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}"><<</a></li>                        
+                                        {% endif %}
+                                        <li class="page-item"><a class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</a></li>
+                                        {% if page_obj.has_next %}                       
+                                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">>></a></li>
+                                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Ultima</a></li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- customer-section end -->
+    </div>
+    <!-- [ Main Content ] end -->
+    
 </div>
 
-<div class="card-footer">           
-    <div class="d-flex justify-content-end pt-2">
-        <nav aria-label="pagination-django">
-            <ul class="pagination">
-                {% if page_obj.has_previous %}                    
-                    <li class="page-item"><a class="page-link" href="?page=1">Primera</a></li>
-                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}"><<</a></li>                        
-                {% endif %}
-                <li class="page-item"><a class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</a></li>
-                {% if page_obj.has_next %}                       
-                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">>></a></li>
-                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Ultima</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-    </div>
-</div>
 
 {% endblock content %}
 
 
 {% block js %}
 
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<!-- Select2 JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-
 <!-- Libreria DAtatables.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
-<script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://cdn.datatables.net/2.1.2/js/dataTables.js"></script> 
+<script src="https://cdn.datatables.net/2.1.2/js/dataTables.bootstrap4.js"></script> 
 
 <!-- Libreria DAtatables.css -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
-<link rel="stylesheet" href=" https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css">
-
-<!-- Select2 -->
-<script>
-    $(document).ready(function () {
-        $('.js-example-basic-single').select2({
-            dropdownParent: $('#staticBackdrop .modal-body')
-        });
-    });
-</script>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap4.css"> 
 
 
 {% endblock %}
