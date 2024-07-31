@@ -1,5 +1,5 @@
 {% extends "index.html" %}
-{% block title %} POSGRADO | Sustentaciones {% endblock title %}
+{% block title %} POSGRADO | Detalle de Sustentaciones {% endblock title %}
 {% load static %}
 
 {% block css %}
@@ -55,32 +55,35 @@
                 </div>
                 <div class="card-body">
                     <form method="get" action="{% url 'listar_detalleevaluaciones' %}">
-                        <div class="row">
-                            <div class="col-md-4">
+                        <div class="row mx-3">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="ponente">Ponente</label>
-                                    <input type="text" class="form-control" id="ponente" name="ponente" placeholder="Buscar por ponente" value="{{ request.GET.ponente }}">
+                                    <input type="text" class="form-control" id="ponente" name="ponente" placeholder="Buscar por ponente" value="{{ ponente_filtro }}">
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="jurado">Jurado</label>
-                                    <input type="text" class="form-control" id="jurado" name="jurado" placeholder="Buscar por jurado" value="{{ request.GET.jurado }}">
+                                    <input type="text" class="form-control" id="jurado" name="jurado" placeholder="Buscar por jurado" value="{{ jurado_filtro }}">
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="cargo">Cargo</label>
                                     <select class="form-control" id="cargo" name="cargo">
                                         <option value="">Seleccionar cargo</option>
-                                        <option value="Presidente" {% if request.GET.cargo == 'Presidente' %}selected{% endif %}>Presidente</option>
-                                        <option value="Secretario" {% if request.GET.cargo == 'Secretario' %}selected{% endif %}>Secretario</option>
-                                        <option value="Vocal" {% if request.GET.cargo == 'Vocal' %}selected{% endif %}>Vocal</option>
+                                        <option value="Presidente" {% if cargo_filtro == 'Presidente' %}selected{% endif %}>Presidente</option>
+                                        <option value="Secretario" {% if cargo_filtro == 'Secretario' %}selected{% endif %}>Secretario</option>
+                                        <option value="Vocal" {% if cargo_filtro == 'Vocal' %}selected{% endif %}>Vocal</option>
                                     </select>
                                 </div>
                             </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Filtrar</button>
+                            <div class="col-md-1"></div>
+                            <div class="col-md-2 mt-5 ">
+                                <button style="width: 100%;" type="submit" class="btn btn-primary ">Filtrar</button>
+                            </div>
+                        </div>                        
                     </form>
                 </div>
             </div>
@@ -88,12 +91,11 @@
     </div>
 
     <!-- [ Main Content ] start -->
-    <div class="row ">
-        <!-- customer-section start -->
+    <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="my-2">DETALLE DE SUSTENTACIONES</h5>                                       
+                    <h5 class="my-2">DETALLE DE SUSTENTACIONES</h5>
                 </div>
                 <div class="pro-scroll">
                     <div class="card-body table-border-style">
@@ -104,7 +106,7 @@
                                         <th><center>PONENTE</center></th>
                                         <th><center>JURADO</center></th>
                                         <th><center>CARGO</center></th>
-                                        <th><center><span style="font-size: 18px;" class="badge badge-light-primary">1</span</center></th>
+                                        <th><center><span style="font-size: 18px;" class="badge badge-light-primary">1</span></center></th>
                                         <th><center><span style="font-size: 18px;" class="badge badge-light-secondary">2</span></center></th>
                                         <th><center><span style="font-size: 18px;" class="badge badge-light-success">3</span></center></th>
                                         <th><center><span style="font-size: 18px;" class="badge badge-light-danger">4</span></center></th>
@@ -114,55 +116,55 @@
                                         <th><center>ACCIONES</center></th>
                                     </tr>
                                 </thead>
-                                {% if page_obj %}
-                                {% for item_evaluacion in page_obj %}
-                                <tr>
-                                    <td>{{ item_evaluacion.alumno}}</td>
-                                    <td>{{ item_evaluacion.jurado}}</td>                                    
-                                    <td>
-                                        {% if item_evaluacion.cargo == "Presidente" %}
-                                            <center><span class="badge badge-pill badge-light-primary" style="font-size: 14px;">{{ item_evaluacion.cargo}}</span></center>
-                                        {% endif %}
-                                        {% if item_evaluacion.cargo == "Secretario" %}
-                                            <center><span class="badge badge-pill badge-light-info" style="font-size: 14px;">{{ item_evaluacion.cargo}}</span></center>  
-                                        {% endif %}
-                                        {% if item_evaluacion.cargo == "Vocal" %}
-                                            <center><span class="badge badge-pill badge-light-success" style="font-size: 14px;">{{ item_evaluacion.cargo}}</span></center>         
-                                        {% endif %}
-                                    </td>
-                                    <td><center>{{ item_evaluacion.originalidad }}</center></td>                    
-                                    <td><center>{{ item_evaluacion.importancia }}</center></td>
-                                    <td><center>{{ item_evaluacion.coherencia }}</center></td>
-                                    <td><center>{{ item_evaluacion.metodologia }}</center></td>
-                                    <td><center>{{ item_evaluacion.validez }}</center></td>
-                                    <td><center>{{ item_evaluacion.dominio_tema }}</center></td>
-                                    <td><center>{{ item_evaluacion.puntajeFinal }}</center></td>
-                                    <td style="text-align: center;">                           
-                                        <a href="{% url 'evaluar_sustentacion' item_evaluacion.idDetEvaluacion %}" onclick="" class="btn btn-secondary btn-sm"><i class="fa-solid fa-eye"></i></a>
-                                    </td>                    
-                                </tr>
-                                {% endfor %}                 
-                                {% else %}                
-                                <tr style="text-align: center;">
-                                    <td colspan="11">
-                                        <p>No hay Registros</p>
-                                    </td>
-                                </tr>
-                                {% endif %}
-                            </table>       
+                                <tbody>
+                                    {% if page_obj %}
+                                    {% for item_evaluacion in page_obj %}
+                                    <tr>
+                                        <td>{{ item_evaluacion.alumno }}</td>
+                                        <td>{{ item_evaluacion.jurado }}</td>
+                                        <td>
+                                            {% if item_evaluacion.cargo == "Presidente" %}
+                                                <center><span class="badge badge-pill badge-light-primary" style="font-size: 14px;">{{ item_evaluacion.cargo }}</span></center>
+                                            {% elif item_evaluacion.cargo == "Secretario" %}
+                                                <center><span class="badge badge-pill badge-light-info" style="font-size: 14px;">{{ item_evaluacion.cargo }}</span></center>
+                                            {% elif item_evaluacion.cargo == "Vocal" %}
+                                                <center><span class="badge badge-pill badge-light-success" style="font-size: 14px;">{{ item_evaluacion.cargo }}</span></center>
+                                            {% endif %}
+                                        </td>
+                                        <td><center>{{ item_evaluacion.originalidad }}</center></td>
+                                        <td><center>{{ item_evaluacion.importancia }}</center></td>
+                                        <td><center>{{ item_evaluacion.coherencia }}</center></td>
+                                        <td><center>{{ item_evaluacion.metodologia }}</center></td>
+                                        <td><center>{{ item_evaluacion.validez }}</center></td>
+                                        <td><center>{{ item_evaluacion.dominio_tema }}</center></td>
+                                        <td><center>{{ item_evaluacion.puntajeFinal }}</center></td>
+                                        <td style="text-align: center;">
+                                            <a href="{% url 'evaluar_sustentacion' item_evaluacion.idDetEvaluacion %}" class="btn btn-secondary btn-sm"><i class="fa-solid fa-eye"></i></a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% else %}
+                                    <tr style="text-align: center;">
+                                        <td colspan="11">
+                                            <p>No hay Registros</p>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="card-footer">           
+                        <div class="card-footer">
                             <div class="d-flex justify-content-end pt-2">
                                 <nav aria-label="pagination-django">
                                     <ul class="pagination">
-                                        {% if page_obj.has_previous %}                    
-                                            <li class="page-item"><a class="page-link" href="?page=1">Primera</a></li>
-                                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}"><<</a></li>                        
+                                        {% if page_obj.has_previous %}
+                                            <li class="page-item"><a class="page-link" href="?page=1&ponente={{ ponente_filtro }}&jurado={{ jurado_filtro }}&cargo={{ cargo_filtro }}">Primera</a></li>
+                                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&ponente={{ ponente_filtro }}&jurado={{ jurado_filtro }}&cargo={{ cargo_filtro }}"><<</a></li>
                                         {% endif %}
                                         <li class="page-item"><a class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</a></li>
-                                        {% if page_obj.has_next %}                       
-                                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">>></a></li>
-                                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Ultima</a></li>
+                                        {% if page_obj.has_next %}
+                                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&ponente={{ ponente_filtro }}&jurado={{ jurado_filtro }}&cargo={{ cargo_filtro }}">>></a></li>
+                                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&ponente={{ ponente_filtro }}&jurado={{ jurado_filtro }}&cargo={{ cargo_filtro }}">Última</a></li>
                                         {% endif %}
                                     </ul>
                                 </nav>
@@ -172,8 +174,9 @@
                 </div>
             </div>
         </div>
-        <!-- customer-section end -->
     </div>
+
+
     <!-- [ Main Content ] end -->
     
 </div>

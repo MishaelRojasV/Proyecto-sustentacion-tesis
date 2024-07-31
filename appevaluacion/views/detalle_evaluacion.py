@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect,  get_object_or_404
 from appevaluacion.models import Alumno, Evaluacion, Jurado, DetalleEvaluacion
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
@@ -10,15 +11,17 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 
-
-
-#@login_required(login_url='login')
+#---------------------------------------------Listar Evaluaciones---------------------------------------------
+@login_required(login_url='login')
 def listar_detalleevaluaciones(request): 
-    # Inicializar la variable evaluador como None
-    jurado = None
+    # Obtener los filtros de la solicitud GET
+    ponente_filtro = request.GET.get('ponente', '')
+    jurado_filtro = request.GET.get('jurado', '')
+    cargo_filtro = request.GET.get('cargo', '')
+
     # Verificar si el usuario es administrador
     if request.user.is_superuser:
-        # Si el usuario es administrador, obtener todas las evaluaciones sin filtrar por evaluador
+        # Si el usuario es administrador, obtener todas las evaluaciones
         datos = DetalleEvaluacion.objects.all()
     else:
         try:
@@ -27,26 +30,28 @@ def listar_detalleevaluaciones(request):
             # Filtrar las evaluaciones por el evaluador
             datos = DetalleEvaluacion.objects.filter(jurado=jurado)
         except ObjectDoesNotExist:
-                # Por ejemplo, puedes redirigir a una página de error o mostrar un mensaje en la plantilla
+            # Redirigir a una página de error o mostrar un mensaje en la plantilla
             return render(request, 'home.html')
-        
+
+    # Aplicar filtros adicionales
+    if ponente_filtro:
+        datos = datos.filter(alumno__nombre_ponente__icontains=ponente_filtro)
+    if jurado_filtro:
+        datos = datos.filter(jurado__nombre_jurado__icontains=jurado_filtro)
+    if cargo_filtro:
+        datos = datos.filter(cargo=cargo_filtro)
+
     # Paginar los resultados
     paginator = Paginator(datos, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
     return render(request, "DetalleEvaluacion/listar.html",  {'page_obj': page_obj})
-  
 
-""" #@login_required(login_url='login')
-def listar_detalleevaluacion_json(_request):    
-    detalle = list(DetalleEvaluacion.objects.values())
-    alumnos = {alumno['idAlumno']: alumno for alumno in Alumno.objects.values()}
-    jurados = {jurado['idJurado']: jurado for jurado in Jurado.objects.values()}
 
-    data = {'detalle':detalle, 'alumnos':alumnos, 'jurados':jurados}
-    return JsonResponse(data)  """
 
+#--------------------------------------------- Proceso de Evaluar---------------------------------------------
+@login_required(login_url='login')
 def evaluar_sustentacion(request, pk):
     # Obtener la instancia de la evaluación correspondiente
     detalle_evaluacion = get_object_or_404(DetalleEvaluacion, pk=pk)
@@ -73,8 +78,7 @@ def evaluar_sustentacion(request, pk):
     
     if request.method == 'POST':
         # Si la solicitud es POST, crea el formulario con los datos enviados
-        form = DetalleEvaluacionForm(request.POST)
-        #status_eva = evaluacion.estado_evaluacion
+        form = DetalleEvaluacionForm(request.POST, instance=detalle_evaluacion)       
         if form.is_valid():          
             # Si el formulario es válido, guarda los datos en la base de datos
             detalle_evaluacion = form.save(commit=False)
@@ -96,7 +100,7 @@ def evaluar_sustentacion(request, pk):
                     <p>Fecha de Sustentación: <strong>{alumno.fecha_sustentacion}</strong></p>
                     <p>Hora: <strong>{alumno.hora_inicio_sustentacion}- {alumno.hora_fin_sustentacion}</strong></p>
                     <br>
-                    <p>Jurado: <strong>{jurado.nombre_jurado}</strong>| Cargo: <strong>{jurado.cargo}</strong>,</p>                    
+                    <p>Jurado: <strong>{jurado.nombre_jurado}</strong>| Cargo: <strong>{detalle_evaluacion.cargo}</strong></p>                    
                     <p>Hemos recibido las siguientes sugerencias para tu evaluación:</p>
                     <pre>{detalle_evaluacion.sugerencias}</pre>
                     <br>
