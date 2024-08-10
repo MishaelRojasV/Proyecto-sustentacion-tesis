@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect,  get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.http import JsonResponse
 from appevaluacion.forms import *
-
 
 #---------------------------------------------Listar usuarios---------------------------------------------
 @login_required(login_url='login')
@@ -32,6 +33,27 @@ def creacion_usuario(request):
     else:
         form = CrearUserForm()
     return render(request, 'usuario/agregar.html', {'form': form})
+
+@csrf_exempt
+@require_POST
+def create_user(request):
+    import json
+    data = json.loads(request.body)
+    
+    username = data.get('username')
+    password = data.get('password')
+    
+    if not username or not password:
+        return JsonResponse({'success': False, 'error': 'Username and password are required.'})
+    
+    # Create the user (adjust according to your needs)
+    try:
+        user = User.objects.create_user(username=username, password=password)
+        return JsonResponse({'success': True})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
+
+
 
 #---------------------------------------------Editar usuarios---------------------------------------------
 @login_required(login_url='login')

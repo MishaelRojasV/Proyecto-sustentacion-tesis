@@ -14,6 +14,8 @@ urlpatterns = [
 
     #Usuarios
     path('usuarios/',include('appevaluacion.routes.usuario'),name="usuarios"),
+    path('create_user/', usuario.create_user, name='create_user'),
+
 
     #Ponente
     path('ponente/',include('appevaluacion.routes.ponente')),

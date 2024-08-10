@@ -120,17 +120,17 @@ class JuradosForm(forms.ModelForm):
             'telefono',           
         ]
         widgets = {                                  
-            'nombre_jurado': forms.TextInput(attrs={'placeholder': 'Ingrese nombres y apellidos'}),           
-            'dni': forms.TextInput(attrs={'placeholder': 'Ingrese dni'}),
-            'email': forms.TextInput(attrs={'placeholder': 'Ingrese correo electronico'}),
-            'telefono': forms.TextInput(attrs={'placeholder': 'Ingrese celular'}),            
+            'nombre_jurado': forms.TextInput(attrs={}),           
+            'dni': forms.TextInput(attrs={}),
+            'email': forms.TextInput(attrs={}),
+            'telefono': forms.TextInput(attrs={}),            
         }
         labels = {
-            'user': 'Nombre de Usuario',
+            'user': '',
             'nombre_jurado': 'Nombre del jurado',
             'dni': 'Dni',
             'email': 'Email',
-            'telefono': 'Telefono/Celular',   
+            'telefono': 'Celular',   
         }
 
 #-------------------------------------- Formulario para Evaluacion-------------------------------------

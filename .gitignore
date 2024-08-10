@@ -7,24 +7,24 @@ __pycache__/
 
 # Archivos de configuración y dependencias
 *.env
-*.log
-*.pot
-*.pyc
+#*.log
+#*.pot
+#*.pyc
 
 # Base de datos SQLite
 db.sqlite3
 
 # Archivos de distribución y construcción
-*.egg-info/
-dist/
-build/
+#*.egg-info/
+#dist/
+#build/
 
 # Archivos de prueba y cobertura
-.coverage
-htmlcov/
-.tox/
-.nox/
-.cache
+#.coverage
+#htmlcov/
+#.tox/
+#.nox/
+#.cache
 
 # Archivos de Jupyter Notebook
-.ipynb_checkpoints
+#.ipynb_checkpoints
