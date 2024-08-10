@@ -2,7 +2,6 @@
 {% block title %} POSGRADO | Jurados {% endblock title %}
 {% load static %}
 
-
 {% block content %}
 <div class="pcoded-content">
     <!-- [ breadcrumb ] start -->
@@ -34,7 +33,7 @@
                 </div>
                 <div class="pro-scroll">
                     <div class="card-body table-border-style">
-                        <div class="table-responsive">
+                        <div class="table-responsive">                            
                             <table class="table table-sm my-3" id="tablajurados" style="width:100%">
                                 <thead class="table">
                                     <tr>                               
@@ -154,7 +153,8 @@
                         <td>
                             <center>                       
                                 <a href="${editUrl}" class="btn btn-sm btn-success" style=" color: white;"><i class='fa fa-edit'></i></a>
-                                <button onclick="eliminarJurado(${item_jurado.idJurado})" class='btn btn-sm btn-danger'><i class='fa-solid fa-trash-can'></i></button>                           
+                                <button onclick="eliminarJurado(${item_jurado.idJurado})" class='btn btn-sm btn-danger'><i class='fa-solid fa-trash-can'></i></button>  
+                                <button onclick="enviarCredenciales(${item_jurado.idJurado})" class="btn btn-sm btn-primary"><i class="fa-solid fa-paper-plane"></i></button>                         
                             </center>
                         </td>
                     </tr>`;
@@ -191,6 +191,77 @@
         }
     </script>
 
+    <script>
+async function enviarCredenciales(juradoId) {
+    // Mostrar el mensaje de carga usando SweetAlert2
+    const loadingSwal = Swal.fire({
+        title: 'Enviando...',
+        text: 'Estamos procesando tu solicitud.',
+        icon: 'info',
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    try {
+        const response = await fetch(`/jurado/enviar_credenciales/${juradoId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken') // CSRF Token para Django
+            },
+            body: JSON.stringify({})
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            Swal.fire({
+                title: 'Éxito!',
+                text: 'Credenciales enviadas con éxito.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        } else {
+            Swal.fire({
+                title: 'Error!',
+                text: data.error || 'Error al enviar credenciales.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire({
+            title: 'Error!',
+            text: 'Error de red.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    } finally {
+        // Ocultar el mensaje de carga después de que la solicitud se complete
+        Swal.close();
+    }
+}
+
+// Función para obtener el CSRF token del cookie
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+    </script>
 
 {% endblock %}
 

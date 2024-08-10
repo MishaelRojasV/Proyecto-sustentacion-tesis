@@ -87,7 +87,7 @@ def evaluar_sustentacion(request, pk):
             detalle_evaluacion.alumno = alumno
             detalle_evaluacion.save()
 
-             # Enviar correo electrónico al alumno
+            # Enviar correo electrónico al alumno
             subject = 'SUSTENTACIÓN DE TESIS | Sugerencias'
             message = f'Hola {alumno.nombre_ponente},\n\nHemos recibido las siguientes sugerencias para tu evaluación:\n\n{detalle_evaluacion.sugerencias}'
             html_message = f"""
