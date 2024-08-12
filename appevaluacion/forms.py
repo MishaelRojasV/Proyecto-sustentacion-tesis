@@ -133,6 +133,11 @@ class JuradosForm(forms.ModelForm):
             'telefono': 'Celular',   
         }
 
+    def __init__(self, *args, **kwargs):
+        super(JuradosForm, self).__init__(*args, **kwargs)        
+        usuario_sinasignacion = User.objects.exclude(jurado__isnull=False)
+        self.fields['user'].queryset = usuario_sinasignacion
+
 #-------------------------------------- Formulario para Evaluacion-------------------------------------
 class EvaluacionForm(forms.ModelForm):
     class Meta:

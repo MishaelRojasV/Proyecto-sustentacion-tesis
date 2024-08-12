@@ -2,7 +2,20 @@
 {% block title %} POSGRADO | Evaluaciones {% endblock title %}
 {% load static %}
 {% load crispy_forms_tags %}
-
+<style>
+        /* Ajusta el z-index para el contenedor de Select2 */
+        .select2-container--default .select2-results {
+            z-index: 1060 !important; /* Asegúrate e que sea mayor que el z-index del modal */
+        }
+        .select2-container {
+            position: relative;
+            z-index: 1060 !important;
+        }
+        /* Ajusta el z-index del modal */
+        .modal {
+            z-index: 1050;
+        }
+</style>
 
 {% block content %}
 <div class="pcoded-content">
@@ -98,8 +111,9 @@
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                             </div>
                             <div class="modal-body">
+                                <center>
                                 <label for="juradoSelected"><b>Jurado</b></label>
-                                <select id="juradoSelected" name="juradoSelected" class="form-control" aria-label="Default select example" onchange="getStockSelected()">
+                                <select id="juradoSelected" name="juradoSelected" class="form-control mr-4">
                                     <option value="-1" selected disabled>Selecciona un Jurado</option>
                                     {% if list_jurados %}
                                         {% for itemjurado in list_jurados %}
@@ -108,6 +122,7 @@
                                     {% else %}
                                     {% endif %}
                                 </select>
+                                </center>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn  btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -137,125 +152,132 @@
             {% endfor %}
     {% endif %}
 
-<!-- Agregar Jurado a Tabla -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const addJuradoButton = document.getElementById('addJuradoButton');
-        const selectedJuradosInput = document.getElementById('selectedJurados');
-        const form = document.querySelector('form'); // Asegúrate de seleccionar el formulario correctamente
 
-        if (addJuradoButton) {
-            addJuradoButton.addEventListener('click', function() {
-                const select = document.getElementById('juradoSelected');
+    <!-- Agregar Jurado a Tabla -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addJuradoButton = document.getElementById('addJuradoButton');
+            const selectedJuradosInput = document.getElementById('selectedJurados');
+            const form = document.querySelector('form'); // Asegúrate de seleccionar el formulario correctamente
+
+            if (addJuradoButton) {
+                addJuradoButton.addEventListener('click', function() {
+                    const select = document.getElementById('juradoSelected');
+                    const tableBody = document.getElementById('tablejurados');
+                    const selectedOption = select.options[select.selectedIndex];
+                    const value = selectedOption.value.split('_');
+                    const idJurado = value[0];
+                    const nombreJurado = value[1];
+                    const dni = value[2];
+                    const celular = value[3];
+                    
+                    // Verificar si ya existe en la tabla para evitar duplicados
+                    const rows = tableBody.getElementsByTagName('tr');
+                    if (rows.length >= 3) {
+                        alert('Solo se pueden ingresar hasta 3 jurados.');
+                        return;
+                    }
+
+                    for (let i = 0; i < rows.length; i++) {
+                        const cells = rows[i].getElementsByTagName('td');
+                        if (cells[0].textContent === idJurado) {
+                            alert('El jurado ya está en la tabla.');
+                            return;
+                        }
+                    }
+                    
+                    // Crear una nueva fila
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><center>${idJurado}</center></td>
+                        <td>${nombreJurado}</td>
+                        <td><center>${dni}</center></td>
+                        <td><center>${celular}</center></td>
+                        <td>
+                            <select class="form-control" name="cargo_${idJurado}">
+                                <option value="Presidente">Presidente</option>
+                                <option value="Secretario">Secretario</option>
+                                <option value="Vocal">Vocal</option>
+                            </select>
+                        </td>
+                        <td><center><button type="button" class="btn btn-danger btn-sm deleteJurado"><i class='fa-solid fa-trash-can'></i></button></center></td>
+                    `;
+                    
+                    // Agregar la nueva fila a la tabla
+                    tableBody.appendChild(row);
+                    
+                    // Actualizar el campo oculto con los IDs de los jurados seleccionados
+                    updateSelectedJurados();
+                    
+                    // Opcional: Cerrar el modal
+                    $('#exampleModalLive').modal('hide');
+                });
+            }
+            
+            // Eliminar jurado de la tabla
+            document.getElementById('tablejurados').addEventListener('click', function(e) {
+                if (e.target.classList.contains('deleteJurado')) {
+                    e.target.closest('tr').remove();
+                    // Actualizar el campo oculto después de eliminar
+                    updateSelectedJurados();
+                }
+            });
+            
+            // Actualizar el campo oculto con los IDs de los jurados seleccionados
+            function updateSelectedJurados() {
+                const rows = document.querySelectorAll('#tablejurados tr');
+                const jurados = [];
+                rows.forEach(row => {
+                    const idJurado = row.children[0].textContent;
+                    jurados.push(idJurado);
+                });
+                selectedJuradosInput.value = jurados.join(',');
+            }
+
+            // Validar que la tabla tenga exactamente 3 filas antes de enviar el formulario
+            // y verificar que no se repitan cargos
+            form.addEventListener('submit', function(event) {
                 const tableBody = document.getElementById('tablejurados');
-                const selectedOption = select.options[select.selectedIndex];
-                const value = selectedOption.value.split('_');
-                const idJurado = value[0];
-                const nombreJurado = value[1];
-                const dni = value[2];
-                const celular = value[3];
-                
-                // Verificar si ya existe en la tabla para evitar duplicados
                 const rows = tableBody.getElementsByTagName('tr');
-                if (rows.length >= 3) {
-                    alert('Solo se pueden ingresar hasta 3 jurados.');
+                
+                if (rows.length !== 3) {
+                    event.preventDefault(); // Evitar el envío del formulario
+                    alert('Debe seleccionar exactamente 3 jurados.');
                     return;
                 }
-
-                for (let i = 0; i < rows.length; i++) {
-                    const cells = rows[i].getElementsByTagName('td');
-                    if (cells[0].textContent === idJurado) {
-                        alert('El jurado ya está en la tabla.');
-                        return;
+                
+                // Verificar que cada cargo sea único
+                const cargos = [];
+                for (const row of rows) {
+                    const select = row.querySelector('select');
+                    if (select) {
+                        const cargo = select.value;
+                        if (cargos.includes(cargo)) {
+                            event.preventDefault(); // Evitar el envío del formulario
+                            alert('Cada jurado debe tener un cargo único.');
+                            return;
+                        }
+                        cargos.push(cargo);
                     }
                 }
-                
-                // Crear una nueva fila
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td><center>${idJurado}</center></td>
-                    <td>${nombreJurado}</td>
-                    <td><center>${dni}</center></td>
-                    <td><center>${celular}</center></td>
-                    <td>
-                        <select class="form-control" name="cargo_${idJurado}">
-                            <option value="Presidente">Presidente</option>
-                            <option value="Secretario">Secretario</option>
-                            <option value="Vocal">Vocal</option>
-                        </select>
-                    </td>
-                    <td><center><button type="button" class="btn btn-danger btn-sm deleteJurado"><i class='fa-solid fa-trash-can'></i></button></center></td>
-                `;
-                
-                // Agregar la nueva fila a la tabla
-                tableBody.appendChild(row);
-                
-                // Actualizar el campo oculto con los IDs de los jurados seleccionados
-                updateSelectedJurados();
-                
-                // Opcional: Cerrar el modal
-                $('#exampleModalLive').modal('hide');
             });
-        }
-        
-        // Eliminar jurado de la tabla
-        document.getElementById('tablejurados').addEventListener('click', function(e) {
-            if (e.target.classList.contains('deleteJurado')) {
-                e.target.closest('tr').remove();
-                // Actualizar el campo oculto después de eliminar
-                updateSelectedJurados();
-            }
         });
-        
-        // Actualizar el campo oculto con los IDs de los jurados seleccionados
-        function updateSelectedJurados() {
-            const rows = document.querySelectorAll('#tablejurados tr');
-            const jurados = [];
-            rows.forEach(row => {
-                const idJurado = row.children[0].textContent;
-                jurados.push(idJurado);
-            });
-            selectedJuradosInput.value = jurados.join(',');
-        }
-
-        // Validar que la tabla tenga exactamente 3 filas antes de enviar el formulario
-        // y verificar que no se repitan cargos
-        form.addEventListener('submit', function(event) {
-            const tableBody = document.getElementById('tablejurados');
-            const rows = tableBody.getElementsByTagName('tr');
-            
-            if (rows.length !== 3) {
-                event.preventDefault(); // Evitar el envío del formulario
-                alert('Debe seleccionar exactamente 3 jurados.');
-                return;
-            }
-            
-            // Verificar que cada cargo sea único
-            const cargos = [];
-            for (const row of rows) {
-                const select = row.querySelector('select');
-                if (select) {
-                    const cargo = select.value;
-                    if (cargos.includes(cargo)) {
-                        event.preventDefault(); // Evitar el envío del formulario
-                        alert('Cada jurado debe tener un cargo único.');
-                        return;
-                    }
-                    cargos.push(cargo);
-                }
-            }
-        });
-    });
-</script>
-
-
+    </script>
 
     <!-- Select2 -->
-<!--     <script>
-        $(document).ready(function () {
-            $('#id_alumno').select2();
+    <script>
+        $(document).ready(function() {
+            $('#juradoSelected').select2({
+                placeholder: 'Selecciona un Jurado',
+                allowClear: true,
+                dropdownParent: $('#exampleModalLive') // Ajusta el dropdown al modal
+            });
+
+            $('#exampleModalLive').on('shown.bs.modal', function () {
+                $('#juradoSelected').select2('open');
+            });
         });
-    </script> -->
+    </script>
 
 {% endblock %}
 
