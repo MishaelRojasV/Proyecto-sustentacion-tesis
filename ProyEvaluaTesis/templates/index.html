@@ -80,12 +80,14 @@
 			</div>
 			<div class="navbar-content">
 				<ul class="pc-navbar">
+					
 					<li class="pc-item pc-caption">
 						<label>Navegación</label>
 					</li>
 					<li class="pc-item">
 						<a href="{% url 'home' %}" class="pc-link "><span class="pc-micon"><i data-feather="home"></i></span><span class="pc-mtext">Home</span></a>
 					</li>
+					{% if request.user.is_superuser %}
 					<li class="pc-item pc-caption">
 						<label>Registros</label>
 					</li>
@@ -98,12 +100,15 @@
                     <li class="pc-item">
 						<a href="{% url 'listar_jurados' %}" class="pc-link "><span class="pc-micon"><i class="fa-brands fa-black-tie"></i></span><span class="pc-mtext"> Jurados</span></a>
 					</li>
+					{% endif %}
                     <li class="pc-item pc-caption">
 						<label>Evaluación</label>
 					</li>
+					{% if request.user.is_superuser %}
                     <li class="pc-item">
 						<a href="{% url 'listar_evaluaciones' %}" class="pc-link "><span class="pc-micon"><i class="fa-regular fa-file-lines"></i></span><span class="pc-mtext">Sustentaciones</span></a>
 					</li>
+					{% endif %}
                     <li class="pc-item">
 						<a href="{% url 'listar_detalleevaluaciones' %}" class="pc-link "><span class="pc-micon"><i class="fa-solid fa-table-cells-large"></i></span><span class="pc-mtext">Detalle sustentaciones</span></a>
 					</li>
@@ -173,8 +178,7 @@
 <!-- [ Main Content ] end -->
 </div>
 
-<!-- <footer class="footer"> © 2024 Posgrado by <a href="#">Mishael Rojas Valiente</a> </footer>
- -->
+<!-- <footer class="footer"> © 2024 Posgrado by <a href="#">Mishael Rojas Valiente</a> </footer>-->
 
 
 

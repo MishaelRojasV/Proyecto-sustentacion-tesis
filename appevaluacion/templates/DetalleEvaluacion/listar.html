@@ -138,9 +138,15 @@
                                         <td><center>{{ item_evaluacion.validez }}</center></td>
                                         <td><center>{{ item_evaluacion.dominio_tema }}</center></td>
                                         <td><center>{{ item_evaluacion.puntajeFinal }}</center></td>
-                                        <td style="text-align: center;">
-                                            <a href="{% url 'evaluar_sustentacion' item_evaluacion.idDetEvaluacion %}" class="btn btn-secondary btn-sm"><i class="fa-solid fa-eye"></i></a>
-                                        </td>
+                                        {% if item_evaluacion.estado == 0 %}
+                                            <td style="text-align: center;">
+                                                <a href="{% url 'evaluar_sustentacion' item_evaluacion.idDetEvaluacion %}" class="btn btn-secondary btn-sm"><i class="fa-solid fa-eye"></i></a>
+                                            </td>
+                                        {% else %}
+                                            <td style="text-align: center;">
+                                                <center><span class="badge badge-pill badge-light-danger" style="font-size: 14px;">EVALUADO</span></center>
+                                            </td>
+                                        {% endif %}
                                     </tr>
                                     {% endfor %}
                                     {% else %}

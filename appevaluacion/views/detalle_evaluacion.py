@@ -85,6 +85,7 @@ def evaluar_sustentacion(request, pk):
             detalle_evaluacion.evaluacion = evaluacion
             detalle_evaluacion.jurado = jurado
             detalle_evaluacion.alumno = alumno
+            detalle_evaluacion.estado = 1
             detalle_evaluacion.save()
 
             # Enviar correo electrónico al alumno

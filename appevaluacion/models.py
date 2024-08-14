@@ -101,6 +101,7 @@ class DetalleEvaluacion(models.Model):
     validez = models.IntegerField(choices=VALIDEZ_CHOICES, default=1)
     dominio_tema = models.IntegerField(choices=DOMINIO_TEMA_CHOICES, default=1)
     puntajeFinal = models.IntegerField(null=False, default=0) 
+    estado = models.IntegerField(default=0)
     sugerencias = models.TextField(blank=True, null=True)
     fecha_creacion = models.DateTimeField(auto_now=True)
     fecha_actualizacion = models.DateTimeField(auto_now=True)
