@@ -46,80 +46,100 @@ class EditarUserForm(forms.ModelForm):
 
 #-------------------------------------- Formulario para Crear y Editar Alumno-------------------------------------
 class AlumnosForm(forms.ModelForm):
+    jornadas = forms.ModelMultipleChoiceField(
+        queryset=Jornada.objects.filter(activo=True),  # Muestra solo las jornadas activas
+        widget=forms.CheckboxSelectMultiple,  # O puedes usar un widget de selección múltiple
+        required=False,
+        label='Jornadas'
+    )
+
     class Meta:
         model = Alumno
         fields = [
-            'codigo',
-            'nombre_ponente',            
+            'codigoAlumno',  # Cambié 'codigo' por 'codigoAlumno' para que coincida con el modelo
+            'nombre_ponente',
             'dni',
             'email',
             'ncelular',
             'ponencia',
             'doctorado_maestria',
-            'unidad',            
+            'unidad',
             'mencion',
-            'sala',            
-            'fecha_sustentacion',            
+            'sala',
+            'fecha_sustentacion',
             'hora_inicio_sustentacion',
             'hora_fin_sustentacion',
-            'asesor',            
+            'asesor',
+            'jornadas',  # Se añade el campo jornadas al formulario
         ]
-        widgets = {                            
-            'codigo': forms.TextInput(attrs={'placeholder': 'Ingrese codigo'}),
-            'nombre_ponente': forms.TextInput(attrs={'placeholder': 'Ingrese nombres y apellidos'}),           
-            'dni': forms.TextInput(attrs={'placeholder': 'Ingrese dni'}),
-            'email': forms.TextInput(attrs={'placeholder': 'Ingrese correo electronico'}),
+        widgets = {
+            'codigoAlumno': forms.TextInput(attrs={'placeholder': 'Ingrese código'}),
+            'nombre_ponente': forms.TextInput(attrs={'placeholder': 'Ingrese nombres y apellidos'}),
+            'dni': forms.TextInput(attrs={'placeholder': 'Ingrese DNI'}),
+            'email': forms.TextInput(attrs={'placeholder': 'Ingrese correo electrónico'}),
             'ncelular': forms.TextInput(attrs={'placeholder': 'Ingrese celular'}),
-            'ponencia': forms.TextInput(attrs={'placeholder': 'Ingrese titulo de la ponencia'}),
-            'doctorado_maestria': forms.TextInput(attrs={'placeholder': 'Ingrese el programa'}),            
+            'ponencia': forms.TextInput(attrs={'placeholder': 'Ingrese título de la ponencia'}),
+            'doctorado_maestria': forms.TextInput(attrs={'placeholder': 'Ingrese el programa'}),
             'unidad': forms.TextInput(attrs={'placeholder': 'Ingrese unidad'}),
             'mencion': forms.TextInput(attrs={'placeholder': 'Ingrese mención'}),
             'sala': forms.TextInput(attrs={'placeholder': 'Ingrese sala'}),
             'fecha_sustentacion': forms.DateInput(attrs={
-                'type': 'date', 
+                'type': 'date',
                 'class': 'form-control',
                 'placeholder': 'Seleccione una fecha'
             }),
             'hora_inicio_sustentacion': forms.TimeInput(attrs={
-                'type': 'time', 
+                'type': 'time',
                 'class': 'form-control',
-                'placeholder': 'Seleccione una hora inicio'
+                'placeholder': 'Seleccione una hora de inicio'
             }),
             'hora_fin_sustentacion': forms.TimeInput(attrs={
-                'type': 'time', 
+                'type': 'time',
                 'class': 'form-control',
-                'placeholder': 'Seleccione una hora final'
+                'placeholder': 'Seleccione una hora de fin'
             }),
         }
         labels = {
-            'codigo': 'Codigo',
-            'nombre_ponente': 'Nombre ponente',
-            'dni': 'Dni',
-            'email': 'Email',
-            'ncelular': 'Ncelular',
+            'codigoAlumno': 'Código del Alumno',
+            'nombre_ponente': 'Nombre del Ponente',
+            'dni': 'DNI',
+            'email': 'Correo Electrónico',
+            'ncelular': 'Celular',
             'ponencia': 'Ponencia',
-            'doctorado_maestria': 'Doctorado maestria',
+            'doctorado_maestria': 'Doctorado o Maestría',
             'unidad': 'Unidad',
-            'mencion': 'Mencion',
+            'mencion': 'Mención',
             'sala': 'Sala',
-            'fecha_sustentacion': 'Fecha sustentacion',
-            'hora_inicio_sustentacion': 'Hora Inicio',
-            'hora_fin_sustentacion': 'Hora Fin',
+            'fecha_sustentacion': 'Fecha de Sustentación',
+            'hora_inicio_sustentacion': 'Hora de Inicio',
+            'hora_fin_sustentacion': 'Hora de Fin',
             'asesor': 'Asesor',
+            'jornadas': 'Jornadas',
         }
+
 
 #-------------------------------------- Formulario para Jurado-------------------------------------
 class JuradosForm(forms.ModelForm):
+    jornadas = forms.ModelMultipleChoiceField(
+        queryset=Jornada.objects.filter(activo=True),  # Muestra solo las jornadas activas
+        widget=forms.CheckboxSelectMultiple,  # O puedes usar un widget de selección múltiple
+        required=False,
+        label='Jornadas'
+    )
+
     class Meta:
         model = Jurado
         fields = [
+            'codigoJurado', 
             'user',
             'nombre_jurado',            
             'dni',
             'email',
-            'telefono',           
+            'telefono',     
+            'jornadas',  # Se añade el campo jornadas al formulario      
         ]
-        widgets = {                                  
+        widgets = {  
+            'codigoJurado': forms.TextInput(attrs={}),                                
             'nombre_jurado': forms.TextInput(attrs={}),           
             'dni': forms.TextInput(attrs={}),
             'email': forms.TextInput(attrs={}),
@@ -130,7 +150,8 @@ class JuradosForm(forms.ModelForm):
             'nombre_jurado': 'Nombre del jurado',
             'dni': 'Dni',
             'email': 'Email',
-            'telefono': 'Celular',   
+            'telefono': 'Celular',  
+            'jornadas': 'Jornadas', 
         }
 
     def __init__(self, *args, **kwargs):
@@ -143,12 +164,12 @@ class EvaluacionForm(forms.ModelForm):
     class Meta:
         model = Evaluacion
         fields = [
-            'codigo',
+            'codigoEvaluacion',
             'alumno',            
             'eliminado',                     
         ]     
         labels = {
-            'codigo': 'Codigo de Evaluación',
+            'codigoEvaluacion': 'Codigo de Evaluación',
             'alumno': 'Datos del Ponente',
             'eliminado': 'Eliminado',  
         }

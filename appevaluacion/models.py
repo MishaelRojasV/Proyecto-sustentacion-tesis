@@ -2,11 +2,24 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
 
-# Create your models here.
+# Modelo para las Jornadas
+class Jornada(models.Model):
+    idJornada = models.AutoField(primary_key=True, null = False)
+    codigoJornada = models.CharField(max_length=10, null=True)
+    descripJornada = models.CharField(max_length=200, null=True)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    fecha_actualizacion = models.DateTimeField(auto_now=True)
+    eliminado = models.BooleanField(default=False)
+    activo = models.BooleanField(default=False)
+
+
+# Modelo para el Ponente
 class Alumno(models.Model):
     idAlumno = models.AutoField(primary_key=True, null=False)   
-    codigo = models.CharField(max_length=10, null=True)    
+    codigoAlumno = models.CharField(max_length=10, null=True)    
     nombre_ponente = models.CharField(max_length=100, null=False)    
     email = models.EmailField(max_length=100, blank=True, null=True)
     dni = models.CharField(max_length=15, null=True) 
@@ -23,64 +36,61 @@ class Alumno(models.Model):
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_actualizacion = models.DateTimeField(auto_now=True)
     eliminado = models.BooleanField(default=False)
+    activo = models.BooleanField(default=True)
+    jornadas = models.ManyToManyField(Jornada, related_name='alumnos')
+
+
+    def clean(self):
+        # Verificar que ambas horas estén presentes
+        if self.hora_inicio_sustentacion and self.hora_fin_sustentacion:
+            # Validar que la hora de inicio no sea mayor a la hora de fin
+            if self.hora_inicio_sustentacion >= self.hora_fin_sustentacion:
+                raise ValidationError(
+                    _('La hora de inicio no puede ser mayor o igual a la hora de fin.')
+                )   
 
     def __str__(self):
         return f'{self.nombre_ponente}'
+    
     
 CARGO = (('Presidente','Presidente'),
         ('Secretario','Secretario'),
         ('Vocal','Vocal'))
 
 
+# Modelo para el Jurado
 class Jurado(models.Model):
     idJurado = models.AutoField(primary_key=True, null=False)   
+    codigoJurado = models.CharField(max_length=10, null=True) 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     nombre_jurado = models.CharField(max_length=200, null=False)  
     dni  = models.CharField(max_length=20, null=True, unique=True)
-    #cargo = models.CharField(max_length=20, choices=CARGO)
     email = models.EmailField(max_length=100, blank=True, null=True)
     telefono = models.CharField(max_length=10, null=True)
-    fecha_creacion = models.DateTimeField(auto_now=True)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_actualizacion = models.DateTimeField(auto_now=True)
     eliminado = models.BooleanField(default=False)
+    activo = models.BooleanField(default=True)
+    jornadas = models.ManyToManyField(Jornada, related_name='jurados')
+
 
     def __str__(self):
         return f'{self.nombre_jurado}'
 
-
-    
+# Modelo para el Evaluación    
 class Evaluacion(models.Model):
     idEvaluacion = models.AutoField(primary_key=True, null = False)
-    codigo = models.CharField(max_length=10, null=False, unique=True )
+    codigoEvaluacion = models.CharField(max_length=10, null=False, unique=True )
     alumno = models.ForeignKey(Alumno, on_delete = models.CASCADE, null = False, unique=True)       
-    fecha_creacion = models.DateTimeField(auto_now=True)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_actualizacion = models.DateTimeField(auto_now=True)
     eliminado = models.BooleanField(default=False)
+    activo = models.BooleanField(default=True)
 
     def __str__(self):
         return f'Puntaje: {self.codigo}'
     
-
-""" class DetalleEvaluacion(models.Model):
-    idDetEvaluacion = models.AutoField(primary_key=True, null = False)
-    evaluacion = models.ForeignKey(Evaluacion, on_delete = models.CASCADE, null = False)
-    jurado = models.ForeignKey(Jurado, on_delete = models.CASCADE, null = False)
-    alumno = models.ForeignKey(Alumno, on_delete = models.CASCADE, null = False)
-    Originalidad = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=False, default=1)
-    Importancia = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=False, default=1)
-    Coherencia = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=False, default=1)
-    Metodologia = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=False, default=1)
-    Validez = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=False, default=1)
-    Dominio_tema = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=False, default=1)   
-    puntajeFinal = models.IntegerField(null=False, default=0) 
-    sugerencias = models.TextField(blank=True, null=True)
-    fecha_creacion = models.DateTimeField(auto_now=True)
-    fecha_actualizacion = models.DateTimeField(auto_now=True)
-    eliminado = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f'Puntaje: {self.idDetEvaluacion}' """
-
+# Modelo para el Detalle de  la Evaluación    
 class DetalleEvaluacion(models.Model):
     ORIGINALIDAD_CHOICES = [(i, i) for i in range(1, 6)]
     IMPORTANCIA_CHOICES = [(i, i) for i in range(1, 6)]
@@ -103,6 +113,11 @@ class DetalleEvaluacion(models.Model):
     puntajeFinal = models.IntegerField(null=False, default=0) 
     estado = models.IntegerField(default=0)
     sugerencias = models.TextField(blank=True, null=True)
-    fecha_creacion = models.DateTimeField(auto_now=True)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_actualizacion = models.DateTimeField(auto_now=True)
     eliminado = models.BooleanField(default=False)
+    activo = models.BooleanField(default=True)
+
+
+
+
