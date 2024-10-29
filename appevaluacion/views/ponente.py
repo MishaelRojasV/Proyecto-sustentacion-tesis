@@ -39,11 +39,11 @@ def actualizar_ponente(request, id):
     if request.method == 'POST':
         form = AlumnosForm(request.POST, instance=ponente)
         if form.is_valid():
-           form.save()
-           messages.success(request, f'Poenente actualizado exitosamente.')
-           return redirect('listar_ponentes')
+            form.save()
+            messages.success(request, f'Ponente actualizado exitosamente.')
+            return redirect('listar_ponentes')
         else:
-           messages.error(request, "El formulario contiene errores. Por favor, corrija")
+            messages.error(request, "El formulario contiene errores. Por favor, corrija")
     else:
         form = AlumnosForm(instance=ponente)
     return render(request, 'ponente/editar.html', {'form': form})

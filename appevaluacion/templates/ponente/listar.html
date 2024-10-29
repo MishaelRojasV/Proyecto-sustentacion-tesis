@@ -139,7 +139,7 @@
                 const editUrl = `/ponente/edit/${item_ponente.idAlumno}/`;
                 content += `
                     <tr>                            
-                        <td>${item_ponente.codigo}</td>                    
+                        <td>${item_ponente.codigoAlumno}</td>                    
                         <td>${item_ponente.nombre_ponente}</td>                                                           
                         <td>${item_ponente.dni}</td>
                         <td>${item_ponente.doctorado_maestria}</td>
@@ -148,7 +148,7 @@
                         <td>
                             <center>                       
                                 <a href="${editUrl}" class="btn btn-sm btn-success" style=" color: white;"><i class='fa fa-edit'></i></a>
-                                <button onclick="eliminarPonente(${item_ponente.idAlumno})" class='btn btn-sm btn-danger'><i class='fa-solid fa-trash-can'></i></button>                           
+                                <button onclick="eliminarPonente(${item_ponente.idAlumno})" class='btn btn-sm btn-danger'><i class='fa-solid fa-trash-can'></i></button>  
                             </center>
                         </td>
                     </tr>`;
@@ -169,7 +169,7 @@
     <script>
         function eliminarPonente(id){
             Swal.fire({
-                title: "¿Realmente deseas eliminar este registro?",
+                title: "¿Deseas eliminar este registro?",
                 text: "ID del Ponente: " + id,
                 icon: 'warning',
                 showCancelButton: true,

@@ -36,21 +36,23 @@
                             <!-- Usuarios -->
                             <div class="col-lg-12">
                                 <div class="row">
-                                <div class="col-lg-6">
-                                    {{ form.nombre_jurado | as_crispy_field }}
-                                    <div id="nombreJuradoError" class="error"></div>
-                                </div> 
-                                <div class="col-lg-3"></div>
-                                <div class="col-lg-3">
-                                    <div class="row">
-                                        <label for=""><b>Usuario</b></label>
+                                    <div class="col-lg-3">
+                                        {{ form.codigoJurado | as_crispy_field }}
+                                        <div id="codigoJuradoError" class="error"></div>
+                                    </div>     
+                                    <div class="col-lg-6">
+                                        {{ form.nombre_jurado | as_crispy_field }}
+                                        <div id="nombreJuradoError" class="error"></div>
+                                    </div> 
+                                    <div class="col-lg-3 " >
+                                        <div class="row">
+                                            <label for=""><b>Usuario</b></label>
+                                        </div>
+                                        <div class="row d-flex align-items-center " >
+                                            {{ form.user | as_crispy_field }}
+                                            <div id="userError" class="error"></div>
+                                        </div>
                                     </div>
-                                    <div class="row d-flex align-items-center ">
-                                        {{ form.user | as_crispy_field }}
-                                        <div id="userError" class="error"></div>
-                                        <div class="ml-3 mb-3"><a onclick="location.reload();"><i class="fa-sharp fa-solid fa-repeat fa-2xl"></i></a></div>
-                                    </div>
-                                </div>
                                 </div>    
                                 <div class="row">
                                 <div class="col-lg-4">

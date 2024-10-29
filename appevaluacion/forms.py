@@ -153,6 +153,7 @@ class JuradosForm(forms.ModelForm):
             'telefono': 'Celular',  
             'jornadas': 'Jornadas', 
         }
+        
 
     def __init__(self, *args, **kwargs):
         super(JuradosForm, self).__init__(*args, **kwargs)        
