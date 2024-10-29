@@ -55,7 +55,7 @@
                 </div>
                 <div class="card-body">
                     <form method="get" action="{% url 'listar_detalleevaluaciones' %}">
-                        <div class="row mx-3">
+                        <div class="row mx-1">
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="ponente">Ponente</label>
@@ -68,20 +68,30 @@
                                     <input type="text" class="form-control" id="jurado" name="jurado" placeholder="Buscar por jurado" value="{{ jurado_filtro }}">
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="cargo">Cargo</label>
                                     <select class="form-control" id="cargo" name="cargo">
-                                        <option value="">Seleccionar cargo</option>
+                                        <option value="">Seleccione</option>
                                         <option value="Presidente" {% if cargo_filtro == 'Presidente' %}selected{% endif %}>Presidente</option>
                                         <option value="Secretario" {% if cargo_filtro == 'Secretario' %}selected{% endif %}>Secretario</option>
                                         <option value="Vocal" {% if cargo_filtro == 'Vocal' %}selected{% endif %}>Vocal</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-1"></div>
+                            <div class="col-md-2">
+                                <div class="form-group" >
+                                    <label for="jornada" class="mr-2">Jornada:</label>
+                                    <select name="jornada" id="jornada" class="form-control">
+                                        <option value="">Seleccione</option>
+                                        {% for jornada in jornadas %}
+                                            <option value="{{ jornada.idJornada }}">{{ jornada.descripJornada }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
                             <div class="col-md-2 mt-5 ">
-                                <button style="width: 100%;" type="submit" class="btn btn-primary ">Filtrar</button>
+                                <button style="width: 80%;" type="submit" class="btn btn-primary ">Filtrar</button>
                             </div>
                         </div>                        
                     </form>

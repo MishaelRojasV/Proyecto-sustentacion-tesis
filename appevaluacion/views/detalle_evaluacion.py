@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect,  get_object_or_404
-from appevaluacion.models import Alumno, Evaluacion, Jurado, DetalleEvaluacion
+from appevaluacion.models import Alumno, Evaluacion, Jurado, DetalleEvaluacion,Jornada
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
@@ -18,6 +18,7 @@ def listar_detalleevaluaciones(request):
     ponente_filtro = request.GET.get('ponente', '')
     jurado_filtro = request.GET.get('jurado', '')
     cargo_filtro = request.GET.get('cargo', '')
+    jornada_filtro = request.GET.get('jornada', '') 
 
     # Verificar si el usuario es administrador
     if request.user.is_superuser:
@@ -40,13 +41,17 @@ def listar_detalleevaluaciones(request):
         datos = datos.filter(jurado__nombre_jurado__icontains=jurado_filtro)
     if cargo_filtro:
         datos = datos.filter(cargo=cargo_filtro)
+    if jornada_filtro:  # Aplicar filtro por jornada
+        datos = datos.filter(jornada__idJornada=jornada_filtro)
 
     # Paginar los resultados
     paginator = Paginator(datos, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, "DetalleEvaluacion/listar.html",  {'page_obj': page_obj})
+    jornadas = Jornada.objects.all()
+
+    return render(request, "DetalleEvaluacion/listar.html",  {'page_obj': page_obj, 'jornadas': jornadas})
 
 
 

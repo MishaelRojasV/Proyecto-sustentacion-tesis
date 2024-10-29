@@ -15,6 +15,8 @@ class Jornada(models.Model):
     eliminado = models.BooleanField(default=False)
     activo = models.BooleanField(default=False)
 
+    def __str__(self):
+        return f'{self.descripJornada}'
 
 # Modelo para el Ponente
 class Alumno(models.Model):
@@ -81,7 +83,8 @@ class Jurado(models.Model):
 class Evaluacion(models.Model):
     idEvaluacion = models.AutoField(primary_key=True, null = False)
     codigoEvaluacion = models.CharField(max_length=10, null=False, unique=True )
-    alumno = models.ForeignKey(Alumno, on_delete = models.CASCADE, null = False, unique=True)       
+    alumno = models.ForeignKey(Alumno, on_delete = models.CASCADE, null = False, unique=True)    
+    jornada = models.ForeignKey(Jornada, on_delete = models.CASCADE, null = False)   
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_actualizacion = models.DateTimeField(auto_now=True)
     eliminado = models.BooleanField(default=False)
@@ -101,6 +104,7 @@ class DetalleEvaluacion(models.Model):
 
     idDetEvaluacion = models.AutoField(primary_key=True, null = False)
     evaluacion = models.ForeignKey(Evaluacion, on_delete = models.CASCADE, null = False)
+    jornada = models.ForeignKey(Jornada, on_delete = models.CASCADE, null = False)   
     jurado = models.ForeignKey(Jurado, on_delete = models.CASCADE, null = False)
     cargo = models.CharField(max_length=20, null = False)
     alumno = models.ForeignKey(Alumno, on_delete = models.CASCADE, null = False)

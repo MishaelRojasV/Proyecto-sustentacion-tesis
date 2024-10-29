@@ -166,20 +166,39 @@ class EvaluacionForm(forms.ModelForm):
         model = Evaluacion
         fields = [
             'codigoEvaluacion',
-            'alumno',            
-            'eliminado',                     
+            'alumno', 
+            'jornada',            
         ]     
         labels = {
             'codigoEvaluacion': 'Codigo de Evaluación',
             'alumno': 'Datos del Ponente',
-            'eliminado': 'Eliminado',  
+            'jornada': 'Jornada',
         }
 
     def __init__(self, *args, **kwargs):
-        super(EvaluacionForm, self).__init__(*args, **kwargs)        
+        super(EvaluacionForm, self).__init__(*args, **kwargs)
+        
+        # Filtrar alumnos sin evaluación
         alumno_sinevaluacion = Alumno.objects.filter(eliminado=False).exclude(evaluacion__isnull=False)
         self.fields['alumno'].queryset = alumno_sinevaluacion
+        
+        # Filtrar jornadas activas
+        jornadas_activas = Jornada.objects.filter(activo=True)
+        self.fields['jornada'].queryset = jornadas_activas
 
+class EditarEvaluacionForm(forms.ModelForm):
+    class Meta:
+        model = Evaluacion
+        fields = [
+            'codigoEvaluacion',
+            'alumno', 
+            'jornada',            
+        ]     
+        labels = {
+            'codigoEvaluacion': 'Codigo de Evaluación',
+            'alumno': 'Datos del Ponente',
+            'jornada': 'Jornada',
+        }
 
 
 class DetalleEvaluacionForm(forms.ModelForm):

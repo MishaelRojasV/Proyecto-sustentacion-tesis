@@ -26,28 +26,97 @@
     <div class="row ">
         <div class="col-lg-12 col-md-12 col-sm-12">
             <div class="card">
-                <div class="card-header ">
-                    <h5>NUEVA SUSTENTACIÓN</h5>                                    
+                <div class="card-header">
+                    <h5>EDITAR SUSTENTACIÓN</h5>
                 </div>  
                 <div class="card-body">
                     <form method="post" class="">
                         {% csrf_token %}
-                        <input type="hidden" id="selectedJurados" name="selectedJurados">
+                        <input type="hidden" id="selectedJurados" name="selectedJurados" value="{% for detalle in evaluacion.detalleevaluacion_set.all %}{{ detalle.jurado.idJurado }}, {% endfor %}">
+                        
                         <div class="row px-5 py-2">           
                             <div class="col-lg-12">
                                 <div class="row">
-                                    <div class="col-lg-3">{{ form.codigo | as_crispy_field }}</div> 
-                                    <div class="col-lg-3"></div> 
-                                    <div class="col-lg-6">{{ form.alumno | as_crispy_field }}</div>                          
-                                </div>                                   
+                                    <div class="col-lg-3">{{ form.codigoEvaluacion | as_crispy_field }}</div> 
+                                    <div class="col-lg-2"></div> 
+                                    <div class="col-lg-4">{{ form.alumno | as_crispy_field }}</div>  
+                                    <div class="col-lg-3">{{ form.jornada | as_crispy_field }}</div>                          
+                                </div>   
+                                <hr class="my-2" style="background-color: #c4c4c4;">
+                                <div class="row py-2">
+                                    <div class="col-12 text-center">
+                                        <h5 style="font-weight: 700;">DETALLE DE EVALUACIÓN</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 pb-3">
+                                        <div class="d-flex justify-content-end">
+                                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalLive">Agregar Jurado</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <table class="table table-sm my-2" >
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col"><center>Id</center></th>
+                                                    <th scope="col"><center>Nombre Jurado</center></th>
+                                                    <th scope="col"><center>Dni</center></th>
+                                                    <th scope="col"><center>Celular</center></th>                            
+                                                    <th scope="col"><center>Cargo</center></th>
+                                                    <th scope="col"><center>Acciones</center></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tablejurados">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>       
                                 <div class="row mt-3">
-                                    <div class="col-lg-6 col-md-6 col-sm-12"><button type="submit" class="btn" style="width: 100%; background-color: #343a40; font-size: 12px; color: white;"><b>GUARDAR</b></button></div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12"><a href="{% url 'listar_evaluaciones' %}" class="btn" style="width: 100%; background-color: rgb(231, 237, 247); font-size: 12px; color: black;"><b>CANCELAR</b></a></div>
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <button type="submit" class="btn" style="width: 100%; background-color: #343a40; font-size: 12px; color: white;"><b>ACTUALIZAR</b></button>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <a href="{% url 'listar_evaluaciones' %}" class="btn" style="width: 100%; background-color: rgb(231, 237, 247); font-size: 12px; color: black;"><b>CANCELAR</b></a>
+                                    </div>
                                 </div>                      
                             </div>
                         </div>                          
-
+    
                     </form>        
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para agregar jurado -->
+<div class="col-sm-12">
+    <div class="card">
+        <div id="exampleModalLive" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLiveLabel" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">LISTA DE JURADOS</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <center>
+                            <label for="juradoSelected"><b>Jurado</b></label>
+                            <select id="juradoSelected" name="juradoSelected" class="form-control mr-4">
+                                <option value="-1" selected disabled>Selecciona un Jurado</option>
+                                {% for itemjurado in list_jurados %}
+                                    <option value="{{ itemjurado.idJurado }}_{{ itemjurado.nombre_jurado }}_{{ itemjurado.dni }}_{{ itemjurado.telefono }}">{{ itemjurado.nombre_jurado }}</option>
+                                {% endfor %}
+                            </select>
+                        </center>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="addJuradoButton">Agregar</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -71,6 +140,122 @@
             {% endfor %}
     {% endif %}
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addJuradoButton = document.getElementById('addJuradoButton');
+            const selectedJuradosInput = document.getElementById('selectedJurados');
+            const form = document.querySelector('form');
+    
+            // Pre-cargar los jurados existentes en la tabla si estamos en modo edición
+            const initialJurados = {{ initial_jurados|safe }}; // Este debe ser un contexto pasado desde la vista
+            const tableBody = document.getElementById('tablejurados');
+    
+            initialJurados.forEach(jurado => {
+                addJuradoRow(jurado.id, jurado.nombre, jurado.dni, jurado.celular, jurado.cargo);
+            });
+    
+            // Actualizar el campo oculto al cargar
+            updateSelectedJurados();
+    
+            if (addJuradoButton) {
+                addJuradoButton.addEventListener('click', function() {
+                    const select = document.getElementById('juradoSelected');
+                    const selectedOption = select.options[select.selectedIndex];
+                    const value = selectedOption.value.split('_');
+                    const idJurado = value[0];
+                    const nombreJurado = value[1];
+                    const dni = value[2];
+                    const celular = value[3];
+    
+                    // Verificar si ya existe en la tabla para evitar duplicados
+                    if (tableBody.getElementsByTagName('tr').length >= 3) {
+                        alert('Solo se pueden ingresar hasta 3 jurados.');
+                        return;
+                    }
+    
+                    for (const row of tableBody.getElementsByTagName('tr')) {
+                        if (row.children[0].textContent === idJurado) {
+                            alert('El jurado ya está en la tabla.');
+                            return;
+                        }
+                    }
+    
+                    // Añadir la fila con los datos del jurado seleccionado
+                    addJuradoRow(idJurado, nombreJurado, dni, celular);
+    
+                    // Actualizar el campo oculto
+                    updateSelectedJurados();
+    
+                    // Cerrar el modal
+                    $('#exampleModalLive').modal('hide');
+                });
+            }
+    
+            // Función para añadir una fila de jurado en la tabla
+            function addJuradoRow(idJurado, nombreJurado, dni, celular, cargo = '') {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><center>${idJurado}</center></td>
+                    <td>${nombreJurado}</td>
+                    <td><center>${dni}</center></td>
+                    <td><center>${celular}</center></td>
+                    <td>
+                        <select class="form-control" name="cargo_${idJurado}">
+                            <option value="Presidente" ${cargo === 'Presidente' ? 'selected' : ''}>Presidente</option>
+                            <option value="Secretario" ${cargo === 'Secretario' ? 'selected' : ''}>Secretario</option>
+                            <option value="Vocal" ${cargo === 'Vocal' ? 'selected' : ''}>Vocal</option>
+                        </select>
+                    </td>
+                    <td><center><button type="button" class="btn btn-danger btn-sm deleteJurado"><i class='fa-solid fa-trash-can'></i></button></center></td>
+                `;
+                tableBody.appendChild(row);
+            }
+    
+            // Eliminar jurado de la tabla
+            tableBody.addEventListener('click', function(e) {
+                if (e.target.classList.contains('deleteJurado')) {
+                    e.target.closest('tr').remove();
+                    updateSelectedJurados();
+                }
+            });
+    
+            // Actualizar el campo oculto con los IDs de los jurados seleccionados
+            function updateSelectedJurados() {
+                const rows = document.querySelectorAll('#tablejurados tr');
+                const jurados = [];
+                rows.forEach(row => {
+                    const idJurado = row.children[0].textContent;
+                    jurados.push(idJurado);
+                });
+                selectedJuradosInput.value = jurados.join(',');
+            }
+    
+            // Validar que la tabla tenga exactamente 3 filas antes de enviar el formulario y que los cargos sean únicos
+            form.addEventListener('submit', function(event) {
+                const rows = tableBody.getElementsByTagName('tr');
+                if (rows.length !== 3) {
+                    event.preventDefault();
+                    alert('Debe seleccionar exactamente 3 jurados.');
+                    return;
+                }
+    
+                const cargos = [];
+                for (const row of rows) {
+                    const select = row.querySelector('select');
+                    if (select) {
+                        const cargo = select.value;
+                        if (cargos.includes(cargo)) {
+                            event.preventDefault();
+                            alert('Cada jurado debe tener un cargo único.');
+                            return;
+                        }
+                        cargos.push(cargo);
+                    }
+                }
+            });
+        });
+    </script>
+       
 
 {% endblock %}
 

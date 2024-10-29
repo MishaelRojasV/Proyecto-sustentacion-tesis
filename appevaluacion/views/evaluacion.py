@@ -45,7 +45,8 @@ def crear_evaluacion(request):
                         evaluacion=evaluacion,
                         jurado=Jurado.objects.get(idJurado=id_jurado),
                         cargo=cargo,
-                        alumno=form.cleaned_data['alumno']
+                        alumno=form.cleaned_data['alumno'],
+                        jornada=form.cleaned_data['jornada']
                     )
 
             return redirect('listar_evaluaciones')
@@ -58,19 +59,62 @@ def crear_evaluacion(request):
 
 #---------------------------------------------Editar Evaluacion---------------------------------------------
 @login_required(login_url='login')
-def actualizar_evaluacion(request, id):
-    evaluacion = get_object_or_404(Evaluacion, pk=id)
+def editar_evaluacion(request, id):
+    evaluacion = get_object_or_404(Evaluacion, idEvaluacion=id)
+    list_jurados = Jurado.objects.filter(eliminado=False).values()
+
     if request.method == 'POST':
-        form = EvaluacionForm(request.POST, instance=evaluacion)
+        form = EditarEvaluacionForm(request.POST, instance=evaluacion)
         if form.is_valid():
-           form.save()
-           messages.success(request, f'Evaluación actualizada exitosamente.')
-           return redirect('listar_evaluaciones')
+            evaluacion = form.save()
+            messages.success(request, 'Evaluación actualizada exitosamente.')
+
+            # Obtener los IDs de los jurados seleccionados y actualizar los detalles
+            selected_jurados_ids = request.POST.get('selectedJurados', '').split(',')
+            
+            # Eliminar los detalles anteriores
+            DetalleEvaluacion.objects.filter(evaluacion=evaluacion).delete()
+
+            # Crear nuevos detalles para los jurados seleccionados
+            for id_jurado in selected_jurados_ids:
+                cargo = request.POST.get(f'cargo_{id_jurado}')
+                if id_jurado:
+                    DetalleEvaluacion.objects.create(
+                        evaluacion=evaluacion,
+                        jurado=Jurado.objects.get(idJurado=id_jurado),
+                        cargo=cargo,
+                        alumno=form.cleaned_data['alumno'],
+                        jornada=form.cleaned_data['jornada']
+                    )
+            return redirect('listar_evaluaciones')
         else:
-           messages.error(request, "El formulario contiene errores. Por favor, corrija")
+            messages.error(request, 'El formulario contiene errores. Por favor, corrige los errores.')
     else:
-        form = EvaluacionForm(instance=evaluacion)
-    return render(request, 'evaluacion/editar.html', {'form': form})
+        form = EditarEvaluacionForm(instance=evaluacion)
+        
+        # Pre-cargar los detalles de jurados seleccionados para la edición
+        initial_jurados = [
+            {
+                'id': detalle.jurado.idJurado,
+                'nombre': detalle.jurado.nombre_jurado,
+                'dni': detalle.jurado.dni,
+                'celular': detalle.jurado.telefono,
+                'cargo': detalle.cargo
+            }
+            for detalle in DetalleEvaluacion.objects.filter(evaluacion=evaluacion)
+        ]
+        
+    # Pasar el form, jurados y jurados seleccionados a la plantilla
+    return render(
+        request, 
+        'evaluacion/editar.html', 
+        {
+            'form': form,
+            'list_jurados': list_jurados,
+            'evaluacion': evaluacion,
+            'initial_jurados': initial_jurados  # Para cargar los datos en la tabla de jurados en el frontend
+        }
+    )
 
 #------------------------------------------Eliminar Evaluacion ------------------------------------------------
 @login_required
@@ -97,10 +141,10 @@ def crear_detalle_evaluacion(request):
         
         try:
             detalle_evaluacion = DetalleEvaluacion.objects.create(
-               eliminado=False,
-               jurado_id=juradoid,
-               evaluacion_id=idEvaluacion,
-               alumno_id=alumnoid
+                eliminado=False,
+                jurado_id=juradoid,
+                evaluacion_id=idEvaluacion,
+                alumno_id=alumnoid
             ) 
             return JsonResponse({'mensaje': f'Jurado Asignado'})
         except Jurado.DoesNotExist:

@@ -49,9 +49,10 @@
                         <div class="row px-5 py-2">           
                             <div class="col-lg-12">
                                 <div class="row">
-                                    <div class="col-lg-3">{{ form.codigo | as_crispy_field }}</div> 
-                                    <div class="col-lg-3"></div> 
-                                    <div class="col-lg-6">{{ form.alumno | as_crispy_field }}</div>                          
+                                    <div class="col-lg-3">{{ form.codigoEvaluacion | as_crispy_field }}</div> 
+                                    <div class="col-lg-2"></div> 
+                                    <div class="col-lg-4">{{ form.alumno | as_crispy_field }}</div>  
+                                    <div class="col-lg-3">{{ form.jornada | as_crispy_field }}</div>                          
                                 </div>   
                                 
                                 <hr class="my-2" style="background-color: #c4c4c4;">
@@ -112,16 +113,13 @@
                             </div>
                             <div class="modal-body">
                                 <center>
-                                <label for="juradoSelected"><b>Jurado</b></label>
-                                <select id="juradoSelected" name="juradoSelected" class="form-control mr-4">
-                                    <option value="-1" selected disabled>Selecciona un Jurado</option>
-                                    {% if list_jurados %}
+                                    <label for="juradoSelected"><b>Jurado</b></label>
+                                    <select id="juradoSelected" name="juradoSelected" class="form-control mr-4">
+                                        <option value="-1" selected disabled>Selecciona un Jurado</option>
                                         {% for itemjurado in list_jurados %}
-                                            <option value="{{itemjurado.idJurado}}_{{itemjurado.nombre_jurado}}_{{itemjurado.dni}}_{{itemjurado.telefono}}">{{itemjurado.nombre_jurado}}</option>
+                                            <option value="{{ itemjurado.idJurado }}_{{ itemjurado.nombre_jurado }}_{{ itemjurado.dni }}_{{ itemjurado.telefono }}">{{ itemjurado.nombre_jurado }}</option>
                                         {% endfor %}
-                                    {% else %}
-                                    {% endif %}
-                                </select>
+                                    </select>
                                 </center>
                             </div>
                             <div class="modal-footer">

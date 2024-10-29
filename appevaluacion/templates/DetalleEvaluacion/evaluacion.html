@@ -12,7 +12,12 @@
         background-color: #6c757d;
         color: white;
     }
+
+
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 <div class="pcoded-content">
     <!-- [ breadcrumb ] start -->
@@ -119,8 +124,7 @@
         </div>
     <!-- [ Main Content ] end -->
     </div>
-    <div class="row ">
-        <!-- customer-section start -->
+    <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-center">
@@ -130,46 +134,31 @@
                     </div>
                 </div>
                 <div class="pro-scroll">
-                        <div class="mb-4">
-                            <form method="post">
-                                {% csrf_token %}
-                                <div class="card-body" style="font-weight: 500;">
-                                    <div class="row">
-                                        <div class="col-md-2 d-flex justify-content-center">
-                                            {{ form.originalidad | as_crispy_field }}                                  
-                                        </div>
-                                        <div class="col-md-2 d-flex justify-content-center">
-                                            {{ form.importancia | as_crispy_field }}                                  
-                                        </div>
-                                        <div class="col-md-2 d-flex justify-content-center">
-                                            {{ form.coherencia | as_crispy_field }}                                  
-                                        </div>
-                                        <div class="col-md-2 d-flex justify-content-center">
-                                            {{ form.metodologia | as_crispy_field }}                                  
-                                        </div>
-                                        <div class="col-md-2 d-flex justify-content-center">
-                                            {{ form.validez | as_crispy_field }}                                  
-                                        </div>
-                                        <div class="col-md-2 d-flex justify-content-center">
-                                            {{ form.dominio_tema | as_crispy_field }}                                  
-                                        </div>
-                                    </div>
-                                    <div class="row ml-4 flex">
-                                        <div class="col-md-9 justify-content-start">
-                                            {{ form.sugerencias | as_crispy_field }}                                  
-                                        </div>  
-                                        <div class="col-md-3 justify-content-end mt-5">
-                                            <button type="submit" class="btn btn-primary btn-sm mt-5" style="width: 100%;">Guardar</button>                                        
-                                        </div>                                       
-                                    </div>  
+                    <div class="mb-4">
+                        <form method="post" onsubmit="showLoadingAlert(event)">
+                            {% csrf_token %}
+                            <div class="card-body" style="font-weight: 500;">
+                                <div class="row">
+                                    <div class="col-md-2 d-flex justify-content-center">{{ form.originalidad | as_crispy_field }}</div>
+                                    <div class="col-md-2 d-flex justify-content-center">{{ form.importancia | as_crispy_field }}</div>
+                                    <div class="col-md-2 d-flex justify-content-center">{{ form.coherencia | as_crispy_field }}</div>
+                                    <div class="col-md-2 d-flex justify-content-center">{{ form.metodologia | as_crispy_field }}</div>
+                                    <div class="col-md-2 d-flex justify-content-center">{{ form.validez | as_crispy_field }}</div>
+                                    <div class="col-md-2 d-flex justify-content-center">{{ form.dominio_tema | as_crispy_field }}</div>
                                 </div>
-                            </form>
-                        </div>
+                                <div class="row ml-4 flex">
+                                    <div class="col-md-9 justify-content-start">{{ form.sugerencias | as_crispy_field }}</div>
+                                    <div class="col-md-3 justify-content-end mt-5">
+                                        <button type="submit" class="btn btn-primary btn-sm mt-5" style="width: 100%;">Guardar</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        <!-- customer-section end -->
         </div>
-    <!-- [ Main Content ] end -->
     </div>
 </div>
 
@@ -183,5 +172,25 @@
 
     {% block js %}
 
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function showLoadingAlert(event) {
+            // Prevenir que el formulario se envíe inmediatamente
+            event.preventDefault();
+    
+            // Mostrar la alerta de carga
+            Swal.fire({
+                title: 'Enviando...',
+                text: 'Por favor, espere...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+    
+            // Enviar el formulario después de mostrar la alerta de carga
+            event.target.submit();
+        }
+    </script>
 
     {% endblock %}
