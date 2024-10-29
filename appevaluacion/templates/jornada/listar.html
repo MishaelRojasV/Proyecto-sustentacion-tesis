@@ -1,0 +1,420 @@
+{% extends "index.html" %}
+{% block title %} POSGRADO | Jornadas {% endblock title %}
+{% load static %}
+
+
+{% block content %}
+<!-- Estilos -->
+<style>
+    .card-header{
+        background-color: #2f5793;
+        color: white;
+    }
+
+    thead, tfoot{
+        background-color: #f0f3f5 !important;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 42px;
+        height: 25px;
+    }
+
+    .switch input { 
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #bab1b1;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 2px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+
+    input:checked + .slider {
+        background-color: #2f5793;
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(18px);
+    }
+
+   
+ 
+</style>
+
+<div class="pcoded-content">
+    <!-- [ breadcrumb ] start -->
+    <div class="page-header">
+        <div class="page-block">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="page-header-title">
+                        <h5 class="m-b-10">JORNADAS</h5>
+                    </div>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item">Listado</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ breadcrumb ] end -->
+    <!-- [ Main Content ] start -->
+    <div class="row ">
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>NUEVA JORNADA</h5>  
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="mb-3">
+                                <label for="codigoJornada" class="form-label">Codigo Jornada</label>
+                                <input type="text" class="form-control"  id="codigoJornada"  id="exampleFormControlInput1" placeholder="Ingrese codigo" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">Descripción</label>
+                                <input type="text" class="form-control"  id="desJornada"  id="exampleFormControlInput1" placeholder="Ingrese una descripción">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 ">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+                                <label class="form-check-label" for="flexCheckChecked">
+                                    Activo
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 text-right">
+                            <a href="" id="crear-jornada-btn" class="btn btn-info btn-sm">
+                                <i class="fa fa-plus-square"></i> Crear
+                            </a> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- customer-section start -->
+        <div class="col-lg-8 col-md-8 col-sm-12">
+            <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5>LISTADO DE JORNADAS</h5>    
+                    <!-- <a href="" class="btn  btn-primary btn-sm "><i class="fa fa-plus-square"></i> AGREGAR JORNADA</a> -->
+                    <!--                     <a href="javascript:void(0)" id="crear-jornada-btn" class="btn btn-primary btn-sm">
+                        <i class="fa fa-plus-square"></i> AGREGAR JORNADA
+                    </a>    -->             
+                </div>
+                <div class="pro-scroll">
+                    <div class="card-body table-border-style">
+                        <div class="table-responsive">                            
+                            <table class="table table-sm my-3" id="tablajornadas" style="width:100%">
+                                <thead class="table">
+                                    <tr>                    
+                                        <th><center>ID</center></th>           
+                                        <th><center>CODIGO</center></th>
+                                        <th><center>DESCRIPCIÓN</center></th>                         
+                                        <th><center>ACTIVO</center></th>                               
+                                    </tr>
+                                </thead>
+                                <tbody id="tablebody_jornadas">
+                                </tbody>                       
+                            </table>        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- customer-section end -->
+    </div>
+    <!-- [ Main Content ] end -->
+</div>
+
+
+{% endblock content %}
+
+
+{% block js %}
+<!-- Libreria DAtatables.js -->
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://cdn.datatables.net/2.1.2/js/dataTables.js"></script> 
+<script src="https://cdn.datatables.net/2.1.2/js/dataTables.bootstrap4.js"></script> 
+
+<!-- Libreria DAtatables.css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap4.css"> 
+
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   
+    <!-- Mensaje de exito -->
+    {% if messages %}
+        {% for m in messages %}
+            <script>
+                Swal.fire({
+                "title": "Éxito",
+                "text":"{{m}}",
+                "icon":"success"
+                })
+                console.log("{{m}}")
+            </script>
+        {% endfor %}
+    {% endif %}
+
+
+<script>
+    let dataTable;
+    let dataTableIsInitialized = false;
+
+
+    const dataTableOptions = {        
+            columnDefs: [               
+                { orderable: false, targets: [3]},
+                { searchable: false, targets: [3] }
+            ],
+            pageLength: 10,
+            destroy: true,
+            language:{
+                lengthMenu: "Mostrar  _MENU_",
+                zeroRecords: "Ningun registro encontrado",
+                info: "",
+                infoEmpty: "",
+                infoFiltered: "",
+                search: "Buscar: ",
+                loadingRecords: "Cargando...",
+                paginate:{
+                    first: "<<",
+                    last: ">>",
+                    next: ">",
+                    previous: "<"
+                }
+            },                                            
+        };
+
+    const initDataTable = async () => {
+        if (dataTableIsInitialized) {
+            dataTable.destroy();
+        }
+        await listaPonentes();
+        dataTable = $("#tablajornadas").DataTable(dataTableOptions);
+        dataTableIsInitialized = true;
+    };
+
+    const listaPonentes = async () => {
+        try {
+            const response = await fetch("/jornada/listar_jornadas_json");
+            const data = await response.json();
+            let content = '';
+            data.jornada.forEach((item_jornada) => {
+                /* const editUrl = `/jornada/edit/${item_jornada.idJurado}/`; */
+                const isActive = item_jornada.activo ? 'checked' : '';
+                content += `
+                    <tr>                            
+                        <td><center>${item_jornada.idJornada}</center></td>                  
+                        <td>${item_jornada.codigoJornada}</td>                                                           
+                        <td><center>${item_jornada.descripJornada}</center></td>
+                        <td>                       
+                            <center>
+                            <label class="switch">
+                                <input type="checkbox" class="status-toggle" data-user-id="${item_jornada.idJornada}" ${isActive}>
+                                <span class="slider round"></span>
+                            </label>         
+                            </center>              
+                        </td>                                   
+                    </tr>`;
+            });
+            document.getElementById('tablebody_jornadas').innerHTML = content;
+        } catch (ex) {
+            console.error('Error al listar los jornadas:', ex);
+        }
+    };
+
+    window.addEventListener("load", async () => {
+        await initDataTable();
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Seleccionamos los elementos del DOM
+        const descripcionInput = document.getElementById("desJornada");
+        const codigoInput = document.getElementById("codigoJornada"); // Cambia el ID si necesitas uno específico para "Código Jornada"
+        
+        // Escuchamos los cambios en el campo de descripción
+        descripcionInput.addEventListener("input", function() {
+            // Validamos el formato de descripción y obtenemos el número final
+            const descripcionTexto = descripcionInput.value.toUpperCase();
+            const match = descripcionTexto.match(/^JORNADA-(\d{4})$/);
+
+            // Si la descripción cumple con el formato "JORNADA-XXXX", generamos el código
+            if (match) {
+                const numero = match[1]; // Capturamos las XXXX
+                const codigoGenerado = `JOR-${numero}`;
+                
+                // Asignamos el valor al campo de Código Jornada
+                codigoInput.value = codigoGenerado;
+            } else {
+                // Si no cumple con el formato, limpiamos el campo de código
+                codigoInput.value = '';
+            }
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const descripcionInput = document.getElementById("desJornada");
+        const codigoInput = document.getElementById("codigoJornada");
+
+        // Escuchamos los cambios en el campo de descripción
+        descripcionInput.addEventListener("input", function() {
+            const descripcionTexto = descripcionInput.value.toUpperCase();
+            const match = descripcionTexto.match(/^JORNADA-(\d{4})$/);
+
+            // Si la descripción cumple con el formato "JORNADA-XXXX", generamos el código
+            if (match) {
+                const numero = match[1]; // Capturamos las XXXX
+                const codigoGenerado = `JOR-${numero}`;
+                
+                // Asignamos el valor al campo de Código Jornada
+                codigoInput.value = codigoGenerado;
+            } else {
+                // Si no cumple con el formato, limpiamos el campo de código
+                codigoInput.value = '';
+            }
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const descripcionInput = document.getElementById("desJornada");
+        const codigoInput = document.getElementById("codigoJornada");
+        const crearJornadaBtn = document.getElementById("crear-jornada-btn");
+
+        // Escuchar el evento de clic en el botón "Crear"
+        crearJornadaBtn.addEventListener("click", function(event) {
+            event.preventDefault(); // Evitar el comportamiento por defecto del enlace
+            
+            // Obtener los valores de los inputs
+            const codigo = codigoInput.value;
+            const descripcion = descripcionInput.value;
+            const activo = document.getElementById("flexCheckChecked").checked;
+
+            // Crear el objeto de datos para enviar
+            const data = {
+                codigoJornada: codigo,
+                descripJornada: descripcion,
+                activo: activo
+            };
+
+            // Enviar la solicitud AJAX
+            fetch('crear-jornada/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}' // Asegúrate de que esto esté disponible en tu plantilla
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(data.message);
+                    // Puedes agregar lógica adicional aquí (como limpiar el formulario, etc.)
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+</script>
+
+<!-- Activar/Desactivar Estado -->
+<script>
+    $(document).ready(function () {
+        // Función para cargar el estado de los switches desde localStorage
+        const loadSwitchStates = () => {
+            $('.status-toggle').each(function () {
+                const userId = $(this).data('user-id');
+                const storedState = localStorage.getItem(`jornada-${userId}`);
+                
+                // Establecer el estado del switch
+                if (storedState !== null) {
+                    $(this).prop('checked', storedState === 'true');
+                }
+            });
+        };
+
+        // Cargar los estados al inicio
+        loadSwitchStates();
+
+        // Evento para manejar el cambio en los switches
+        $('body').on('change', '.status-toggle', function () {
+            var user_id = $(this).data('user-id');
+            var is_active = $(this).is(':checked');
+
+            // Guardar el estado en localStorage
+            localStorage.setItem(`jornada-${user_id}`, is_active);
+
+            // Realizar la llamada AJAX para actualizar el estado en el servidor
+            $.ajax({
+                url: '/jornada/update-status-jornada/',
+                method: 'POST',
+                data: {
+                    'user_id': user_id,
+                    'is_active': is_active,
+                    'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+                },
+                error: function (response) {
+                    alert('Error al cambiar el estado.');
+                    // Revertir el cambio en caso de error
+                    $(this).prop('checked', !is_active);
+                }
+            });
+        });
+    });
+</script>
+
+
+
+{% endblock %}
+
