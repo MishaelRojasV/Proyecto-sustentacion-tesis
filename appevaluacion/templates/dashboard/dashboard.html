@@ -1,0 +1,418 @@
+{% extends "index.html" %}
+{% block title %} POSGRADO | Evaluaciones {% endblock title %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block css %}
+<!-- Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<!-- Select2 CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+{% endblock %}
+
+<style>
+        /* Ajusta el z-index para el contenedor de Select2 */
+        .select2-container--default .select2-results {
+            z-index: 1060 !important; /* Asegúrate e que sea mayor que el z-index del modal */
+        }
+        .select2-container {
+            position: relative;
+            z-index: 1060 !important;
+        }
+        /* Ajusta el z-index del modal */
+        .modal {
+            z-index: 1050;
+        }
+        /* Tamaño personalizado del gráfico */
+        #chart {
+            max-width: 600px;
+            margin: 15px auto;
+        }
+</style>
+
+{% block content %}
+<div class="pcoded-content">
+
+    <div class="page-header">
+        <div class="page-block">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="page-header-title">
+                        <h5 class="m-b-10">DASHBOARD</h5>
+                    </div>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item">Reportes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ 
+    
+    <div class="row">
+        <div class="col-lg-6 col-sm-6">
+            <div class="card">
+                <div class="card-body py-2">
+<form method="get" action="">
+    <div class="row m-b-0 d-flex align-items-center">
+        <div class="col-lg-6 mb-1 mt-1">
+            <div class="form-group">
+                <label for="jornada" class="mr-2">Jornada:</label>
+                <select name="jornada" id="jornada" class="form-control">
+                    <!-- Opción para todas las jornadas -->
+                    <option value="" {% if jornada_id == "" %}selected{% endif %}>TODAS</option>
+                    
+                    <!-- Iteración para cargar las opciones de jornada -->
+                    {% for jornada in jornadas %}
+                    <option value="{{ jornada.idJornada }}" {% if jornada_id == jornada.idJornada|stringformat:"s" %}selected{% endif %}>
+                        {{ jornada.descripJornada }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div class="col-lg-2 mb-1 mt-1"></div>
+        
+        <!-- Botón para aplicar el filtro -->
+        <div class="col-lg-3 d-flex justify-content-end">
+            <button style="width: 100%;" type="submit" class="btn btn-secondary btn-sm">Filtrar</button>
+        </div>
+    </div>
+</form>
+                </div>
+            </div>
+        </div> 
+        <div class="col-lg-6 col-sm-6">
+            <div class="card prod-p-card background-pattern">
+                <div class="card-body">
+                    <div class="row align-items-center m-b-0">
+                        <div class="col">
+                            <h6 class="m-b-5">TOTAL DE SUSTENTACIONES</h6>
+                            <h3 class="m-b-0">{{ total_sustentaciones }}</h3>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-regular fa-folder-open"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3 col-sm-6">
+            <div class="card prod-p-card background-pattern">
+                <div class="card-body">
+                    <div class="row align-items-center m-b-0">
+                        <div class="col">
+                            <h6 class="m-b-5">TOTAL DE JURADOS</h6>
+                            <h3 class="m-b-0">{{ total_jurados }}</h3>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-brands fa-black-tie"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="card prod-p-card background-pattern">
+                <div class="card-body">
+                    <div class="row align-items-center m-b-0">
+                        <div class="col">
+                            <h6 class="m-b-5">TOTAL PONENTES</h6>
+                            <h3 class="m-b-0">{{ total_ponentes }}</h3>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="card prod-p-card background-pattern">
+                <div class="card-body">
+                    <div class="row align-items-center m-b-0">
+                        <div class="col">
+                            <h6 class="m-b-5">PONENTES EVALUADOS</h6>
+                            <h3 class="m-b-0">{{ total_ponentes_evaluados }}</h3>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-circle-check text-success"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="card prod-p-card background-pattern">
+                <div class="card-body">
+                    <div class="row align-items-center m-b-0">
+                        <div class="col">
+                            <h6 class="m-b-5">PONENTES SIN EVALUAR</h6>
+                            <h3 class="m-b-0">{{ total_ponentes_sinevaluar }}</h3>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-circle-xmark text-danger"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 col-sm-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>CANTIDAD DE SUSTENTACIONES EVALUADAS POR CARGO</h5>
+                </div>
+                <div class="card-body">                    
+                    <div id="chart"></div>       
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>ESTADO DE SUSTENTACIONES</h5>
+                </div>
+                <div class="card-body">                    
+                    <div id="chart1"></div>       
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12 col-sm-12">
+            <div class="card prod-p-card background-pattern">
+                <div class="card-header">
+                    <h5>EVALUACIONES POR UNIDAD</h5>
+                </div>
+                <div class="card-body">                    
+                    <div id="myMixedChart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+{% endblock content %}
+
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Define las etiquetas y valores del gráfico usando los datos de Django
+        const labels = ["Evaluados", "No evaluados", "Sin sustentación"];
+        const values = [
+            Number("{{ total_ponentes_evaluados }}"),
+            Number("{{ total_ponentes_sinevaluar }}"),
+            Number("{{ total_ponentes_sinsusten }}")
+        ];
+        console.log("Valores del gráfico:", values);
+
+        // Configuración del gráfico de pastel
+        const options2 = {
+            chart: {
+                type: 'pie',
+                height: 350
+            },
+            series: values,  // Asigna los valores obtenidos de la vista Django
+            labels: labels,  // Etiquetas de los diferentes estados de ponentes
+            fill: {
+                opacity: 0.8
+            },
+            dataLabels: {
+                enabled: true,
+                formatter: function (val) {
+                    return `${val.toFixed(2)}%`; // Muestra porcentaje con dos decimales
+                }
+            },
+            stroke: {
+                colors: ['#fff']
+            },
+            legend: {
+                position: 'bottom', // Cambia la posición de la leyenda a la parte inferior
+                horizontalAlign: 'center', // Centra la leyenda
+                floating: false
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        height: 300
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }]
+        };
+
+        // Inicializar el gráfico
+        const chart2 = new ApexCharts(document.querySelector("#chart1"), options2);
+        chart2.render();
+    });
+</script>
+
+
+<script>
+        const jornadaSelector = document.getElementById("jornada");
+        const jornadaIds = jornadaSelector.value; // Obtener el valor de jornada
+        console.log(jornadaIds);
+
+
+        // Llama a la API para obtener los datos
+        fetch(`/obtener_datos_grafico/?jornada=${jornadaIds}`)
+            .then(response => response.json())
+            .then(data => {
+                const datosUnidades = data.datos_unidades;
+                
+                // Extrae las categorías (unidades) y datos para el gráfico
+                const categories = datosUnidades.map(item => item.unidad);
+                const totalAlumnos = datosUnidades.map(item => item.total_alumnos);
+                const totalEvaluaciones = datosUnidades.map(item => item.total_evaluaciones);
+
+                // Configuración del gráfico
+                const options = {
+                    chart: {
+                        height: 350,
+                        type: 'line',
+                    },
+                    series: [
+                        {
+                            name: 'Total Ponentes Evaluados',
+                            type: 'column', // Gráfico de barras
+                            data: totalAlumnos
+                        },
+                        {
+                            name: 'Total de Ponentes',
+                            type: 'line', // Gráfico de línea
+                            data: totalEvaluaciones
+                        }
+                    ],
+                    xaxis: {
+                        categories: categories
+                    },
+                    yaxis: {
+                        min: 0,
+                        max: Math.max(...totalAlumnos, ...totalEvaluaciones) + 2 // Ajusta el límite máximo
+                    },
+                    stroke: {
+                        width: [0, 3] // Grosor de la línea de la gráfica de líneas
+                    },
+                    fill: {
+                        opacity: [0.7, 0.8] // Opacidad para la gráfica de barras y la de línea
+                    },
+                    colors: ['#4B70FF', '#87CEFA'], // Colores de las gráficas
+                    plotOptions: {
+                        bar: {
+                            columnWidth: '50%' // Ancho de las columnas
+                        }
+                    },
+                    dataLabels: {
+                        enabled: false // Deshabilitar etiquetas en las barras y líneas
+                    },
+                    legend: {
+                        position: 'top'
+                    }
+                };
+
+                // Renderiza el gráfico
+                const chart = new ApexCharts(document.querySelector("#myMixedChart"), options);
+                chart.render();
+            })
+            .catch(error => console.error('Error al obtener los datos:', error));
+    
+</script>
+
+
+
+<script>
+    const jornadaSelect = document.getElementById("jornada");
+    const jornadaId = jornadaSelect.value; // Obtener el valor de jornada
+    console.log(jornadaId);
+
+    // Realizar una solicitud a la API para obtener los datos
+    fetch(`/datos-polar-area/?jornada=${jornadaId}`) // Usar comillas invertidas
+        .then(response => {
+            if (!response.ok) { // Manejo de errores HTTP
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Extrae los nombres de los cargos y las cantidades para el gráfico
+            const labels = data.map(item => item.cargo || 'Sin definir');
+            const values = data.map(item => item.cantidad);
+
+            // Configurar el gráfico de área polar con los datos obtenidos
+            const options = {
+                chart: {
+                    type: 'polarArea',
+                    height: 350
+                },
+                series: values,
+                labels: labels,
+                fill: {
+                    opacity: 0.8
+                },
+                dataLabels: {
+                    enabled: true,
+                    formatter: function (val) {
+                        return ` ${val.toFixed(2)}%`;
+                    }
+                },
+                stroke: {
+                    colors: ['#e0e0e0']
+                },
+                plotOptions: {
+                    polarArea: {
+                        rings: {
+                            strokeWidth: 1,
+                            strokeColor: '#e0e0e0'
+                        },
+                        spokes: {
+                            strokeWidth: 1,
+                            connectorColors: '#e0e0e0'
+                        }
+                    }
+                },
+                yaxis: {
+                    min: 0,
+                    max: Math.max(...values),
+                    tickAmount: Math.max(...values)
+                },
+                legend: {
+                    position: 'bottom',
+                    horizontalAlign: 'center',
+                    floating: false
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            height: 200
+                        }
+                    }
+                }]
+            };
+
+            // Inicializar el gráfico
+            const chart = new ApexCharts(document.querySelector("#chart"), options);
+            chart.render();
+        })
+        .catch(error => console.error('Error al obtener los datos:', error));
+</script>
+{% endblock %}
+

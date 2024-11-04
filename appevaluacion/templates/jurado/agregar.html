@@ -44,31 +44,41 @@
                                         {{ form.nombre_jurado | as_crispy_field }}
                                         <div id="nombreJuradoError" class="error"></div>
                                     </div> 
-                                    <div class="col-lg-3 " >
+                                    <div class="col-lg-3" >
                                         <div class="row">
                                             <label for=""><b>Usuario</b></label>
                                         </div>
-                                        <div class="row d-flex align-items-center " >
+                                        <div class="row d-flex align-items-center" >
                                             {{ form.user | as_crispy_field }}
                                             <div id="userError" class="error"></div>
                                         </div>
                                     </div>
                                 </div>    
+
                                 <div class="row">
-                                <div class="col-lg-4">
-                                    {{ form.email | as_crispy_field }}
-                                    <div id="emailError" class="error"></div>
+                                    <div class="col-lg-4">
+                                        {{ form.email | as_crispy_field }}
+                                        <div id="emailError" class="error"></div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                    </div>
+                                    <div class="col-lg-4">
+                                        {{ form.jornadas | as_crispy_field }}
+                                        <div id="emailError" class="error"></div>
+                                    </div>
                                 </div>
-                                <div class="col-lg-2"></div>
-                                <div class="col-lg-3">
-                                    {{ form.dni | as_crispy_field }}
-                                    <div id="dniError" class="error"></div>
+
+                                <div class="row">
+                                
+                                    <div class="col-lg-4">
+                                        {{ form.dni | as_crispy_field }}
+                                        <div id="dniError" class="error"></div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        {{ form.telefono | as_crispy_field }}
+                                        <div id="telefonoError" class="error"></div>
+                                    </div>
                                 </div>
-                                <div class="col-lg-3">
-                                    {{ form.telefono | as_crispy_field }}
-                                    <div id="telefonoError" class="error"></div>
-                                </div>                     
-                                </div>      
                 
                                 <div class="row mt-3">
                                 <div class="col-lg-6 col-md-6 col-sm-12">

@@ -18,6 +18,27 @@ class Jornada(models.Model):
     def __str__(self):
         return f'{self.descripJornada}'
 
+DOCTORADO_MAESTRIA_CHOICES = [
+        ('DOCTORADO', 'DOCTORADO'),
+        ('MAESTRIA', 'MAESTRIA')
+]
+
+UNIDAD_CHOICES = [
+        ('UNIDAD DE CIENCIAS ECONOMICAS', 'UNIDAD DE CIENCIAS ECONOMICAS'),
+        ('UNIDAD DE DERECHO', 'UNIDAD DE DERECHO'),
+        ('UNIDAD DE FARMACIA Y BIOQUIMICA', 'UNIDAD DE FARMACIA Y BIOQUIMICA'),
+        ('UNIDAD DE CIENCIAS MEDICAS', 'UNIDAD DE CIENCIAS MEDICAS'),
+        ('UNIDAD DE CIENCIAS SOCIALES', 'UNIDAD DE CIENCIAS SOCIALES'),
+        ('UNIDAD DE INGENIERIA', 'UNIDAD DE INGENIERIA'),
+        ('UNIDAD DE CIENCIAS BIOLOGICAS', 'UNIDAD DE CIENCIAS BIOLOGICAS'),
+        ('UNIDAD DE CIENCIAS FISICAS Y MATEMATICAS', 'UNIDAD DE CIENCIAS FISICAS Y MATEMATICAS'),
+        ('UNIDAD DE ENFERMERIA', 'UNIDAD DE ENFERMERIA'),
+        ('UNIDAD DE ING. QUIMICA', 'UNIDAD DE ING. QUIMICA'),
+        ('UNIDAD DE AGROPECUARIAS', 'UNIDAD DE AGROPECUARIAS'),
+        ('UNIDAD DE EDUCACION', 'UNIDAD DE EDUCACION'),
+    ]
+
+
 # Modelo para el Ponente
 class Alumno(models.Model):
     idAlumno = models.AutoField(primary_key=True, null=False)   
@@ -27,8 +48,8 @@ class Alumno(models.Model):
     dni = models.CharField(max_length=15, null=True) 
     ncelular =  models.CharField(max_length=10, null=True)   
     ponencia = models.CharField(max_length=200, blank=True, null=True)  
-    doctorado_maestria = models.CharField(max_length=200, blank=True, null=True)   
-    unidad = models.CharField(max_length=200, blank=True, null=True)
+    doctorado_maestria = models.CharField(max_length=200, choices=DOCTORADO_MAESTRIA_CHOICES, blank=True, null=True)   
+    unidad = models.CharField(max_length=200, choices=UNIDAD_CHOICES, blank=True, null=True)
     mencion = models.CharField(max_length=200, blank=True, null=True)
     sala = models.CharField(max_length=100, blank=True, null=True)
     fecha_sustentacion = models.DateField(blank=True, null=True)
@@ -84,6 +105,7 @@ class Evaluacion(models.Model):
     idEvaluacion = models.AutoField(primary_key=True, null = False)
     codigoEvaluacion = models.CharField(max_length=10, null=False, unique=True )
     alumno = models.ForeignKey(Alumno, on_delete = models.CASCADE, null = False, unique=True)    
+    estadoFinal = models.IntegerField(default=0)
     jornada = models.ForeignKey(Jornada, on_delete = models.CASCADE, null = False)   
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_actualizacion = models.DateTimeField(auto_now=True)

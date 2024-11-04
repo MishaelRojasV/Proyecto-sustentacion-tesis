@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from appevaluacion.views import evaluacion, views, usuario
+from appevaluacion.views import evaluacion, views, usuario,dashboard
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,6 +29,12 @@ urlpatterns = [
     path('evaluacion/',include('appevaluacion.routes.evaluacion')),
 
     path('detalle/',include('appevaluacion.routes.detalle_evaluacion')),
+
+    #Reportes
+    path('dashboard/', dashboard.dashboard, name='dashboard'),
+    path('datos-polar-area/', dashboard.obtener_datos_polar_area, name='obtener_datos_polar_area'),
+    path('obtener_datos_grafico/', dashboard.obtener_datos_grafico, name='obtener_datos_grafico'),
+
 
 
     path('create-detalle/',evaluacion.crear_detalle_evaluacion ,name="crear_detalle_evaluacion"),

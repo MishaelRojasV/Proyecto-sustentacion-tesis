@@ -85,8 +85,13 @@
 						<label>Navegación</label>
 					</li>
 					<li class="pc-item">
-						<a href="{% url 'home' %}" class="pc-link "><span class="pc-micon"><i data-feather="home"></i></span><span class="pc-mtext">Home</span></a>
+						<a href="{% url 'home' %}" class="pc-link "><span class="pc-micon"><i data-feather="home"></i></span><span class="pc-mtext">Home</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span></a>
 					</li>
+					{% if request.user.is_superuser %}
+					<li class="pc-item">
+						<a href="{% url 'dashboard' %}" class="pc-link "><span class="pc-micon"><i class="fa-solid fa-chart-pie"></i></span><span class="pc-mtext">Reportes</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span></a>
+					</li>
+					{% endif %}
 					{% if request.user.is_superuser %}
 					<li class="pc-item pc-caption">
 						<label>Registros</label>
@@ -98,10 +103,10 @@
 						<a href="{% url 'listar_usuarios' %}" class="pc-link "><span class="pc-micon"><i class="fa-solid fa-users"></i></span><span class="pc-mtext"> Usuarios</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span></a>
 					</li>
 					<li class="pc-item">
-						<a href="{% url 'listar_ponentes' %}" class="pc-link "><span class="pc-micon"><i class="fa-solid fa-graduation-cap"></i></span><span class="pc-mtext">Ponentes</span></a>
+						<a href="{% url 'listar_ponentes' %}" class="pc-link "><span class="pc-micon"><i class="fa-solid fa-graduation-cap"></i></span><span class="pc-mtext">Ponentes</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span></a>
 					</li>
                     <li class="pc-item">
-						<a href="{% url 'listar_jurados' %}" class="pc-link "><span class="pc-micon"><i class="fa-brands fa-black-tie"></i></span><span class="pc-mtext"> Jurados</span></a>
+						<a href="{% url 'listar_jurados' %}" class="pc-link "><span class="pc-micon"><i class="fa-brands fa-black-tie"></i></span><span class="pc-mtext"> Jurados</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span></a>
 					</li>
 					{% endif %}
                     <li class="pc-item pc-caption">
@@ -187,16 +192,16 @@
 
     <!-- Required Js -->
     <script src="{% static '/assets/js/vendor-all.min.js' %}"></script>
-    <!-- <script src="{% static '/assets/js/plugins/bootstrap.min.js' %}"></script>  -->
+    <script src="{% static '/assets/js/plugins/bootstrap.min.js' %}"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>  -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script> 
-
+<!--     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script> 
+ -->
 
     <script src="{% static '/assets/js/plugins/feather.min.js' %}"></script>
     <script src="{% static '/assets/js/pcoded.min.js' %}"></script> 
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js'"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js'"></script> 
     <script src="{% static '/assets/js/plugins/clipboard.min.js' %}"></script>
-    <!-- <script src="{% static '/assets/js/uikit.min.js' %}"></script> -->
+    <script src="{% static '/assets/js/uikit.min.js' %}"></script> 
 
     <!-- Apex Chart -->
     <script src="{% static '/assets/js/plugins/apexcharts.min.js' %}"></script>

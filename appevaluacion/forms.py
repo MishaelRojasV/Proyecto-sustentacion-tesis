@@ -56,7 +56,7 @@ class AlumnosForm(forms.ModelForm):
     class Meta:
         model = Alumno
         fields = [
-            'codigoAlumno',  # Cambié 'codigo' por 'codigoAlumno' para que coincida con el modelo
+            'codigoAlumno',  
             'nombre_ponente',
             'dni',
             'email',
@@ -79,8 +79,8 @@ class AlumnosForm(forms.ModelForm):
             'email': forms.TextInput(attrs={'placeholder': 'Ingrese correo electrónico'}),
             'ncelular': forms.TextInput(attrs={'placeholder': 'Ingrese celular'}),
             'ponencia': forms.TextInput(attrs={'placeholder': 'Ingrese título de la ponencia'}),
-            'doctorado_maestria': forms.TextInput(attrs={'placeholder': 'Ingrese el programa'}),
-            'unidad': forms.TextInput(attrs={'placeholder': 'Ingrese unidad'}),
+            'doctorado_maestria': forms.Select(attrs={'placeholder': 'Seleccione el programa'}),
+            'unidad': forms.Select(attrs={'placeholder': 'Seleccione la unidad'}),
             'mencion': forms.TextInput(attrs={'placeholder': 'Ingrese mención'}),
             'sala': forms.TextInput(attrs={'placeholder': 'Ingrese sala'}),
             'fecha_sustentacion': forms.DateInput(attrs={
@@ -116,6 +116,23 @@ class AlumnosForm(forms.ModelForm):
             'asesor': 'Asesor',
             'jornadas': 'Jornadas',
         }
+    
+    def save(self, commit=True):
+        # Primero guardamos el alumno
+        alumno = super().save(commit=False)
+        
+        if commit:
+            alumno.save()  # Guardamos la instancia del Alumno
+
+        # Asignamos las jornadas seleccionadas
+        if self.cleaned_data['jornadas']:
+            alumno.jornadas.set(self.cleaned_data['jornadas'])  # Establecemos la relación ManyToMany
+        else:
+            alumno.jornadas.clear()  # Limpiamos si no hay jornadas seleccionadas
+        
+        # Guardamos la instancia con las relaciones ManyToMany si `commit` es True
+        self.save_m2m()
+        return alumno
 
 
 #-------------------------------------- Formulario para Jurado-------------------------------------
@@ -159,6 +176,23 @@ class JuradosForm(forms.ModelForm):
         super(JuradosForm, self).__init__(*args, **kwargs)        
         usuario_sinasignacion = User.objects.exclude(jurado__isnull=False)
         self.fields['user'].queryset = usuario_sinasignacion
+
+    def save(self, commit=True):
+        # Guardar primero la instancia del jurado sin confirmar la relación ManyToMany
+        jurado = super().save(commit=False)
+        
+        if commit:
+            jurado.save()  # Guardamos la instancia del Jurado
+
+        # Asignar las jornadas seleccionadas al jurado
+        if self.cleaned_data['jornadas']:
+            jurado.jornadas.set(self.cleaned_data['jornadas'])  # Establecemos la relación ManyToMany
+        else:
+            jurado.jornadas.clear()  # Limpiamos si no hay jornadas seleccionadas
+        
+        # Guardamos la instancia con las relaciones ManyToMany
+        self.save_m2m()
+        return jurado
 
 #-------------------------------------- Formulario para Evaluacion-------------------------------------
 class EvaluacionForm(forms.ModelForm):

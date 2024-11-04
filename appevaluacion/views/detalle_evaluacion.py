@@ -85,13 +85,29 @@ def evaluar_sustentacion(request, pk):
         # Si la solicitud es POST, crea el formulario con los datos enviados
         form = DetalleEvaluacionForm(request.POST, instance=detalle_evaluacion)       
         if form.is_valid():          
+
+               
+
             # Si el formulario es válido, guarda los datos en la base de datos
             detalle_evaluacion = form.save(commit=False)
+            PuntajeParcial = detalle_evaluacion.originalidad + detalle_evaluacion.importancia + detalle_evaluacion.coherencia + detalle_evaluacion.metodologia + detalle_evaluacion.validez + detalle_evaluacion.dominio_tema          
             detalle_evaluacion.evaluacion = evaluacion
             detalle_evaluacion.jurado = jurado
             detalle_evaluacion.alumno = alumno
             detalle_evaluacion.estado = 1
+            detalle_evaluacion.puntajeFinal = PuntajeParcial
             detalle_evaluacion.save()
+
+            # Verificar si el alumno ha sido evaluado por los tres jurados
+            total_evaluaciones_jurados = DetalleEvaluacion.objects.filter(
+                evaluacion=evaluacion,
+                estado=1  # Suponiendo que 'estado=1' significa que la evaluación fue completada
+            ).count()
+
+            if total_evaluaciones_jurados == 3:
+                evaluacion.estadoFinal = True
+                evaluacion.save()
+
 
             # Enviar correo electrónico al alumno
             subject = 'SUSTENTACIÓN DE TESIS | Sugerencias'
