@@ -34,7 +34,7 @@ def acceder(request):
 
 @login_required(login_url='login')
 def home(request):
-    return render(request, "index.html", {'user_logged':request.session['user_logged']})
+    return render(request, "home.html", {'user_logged':request.session['user_logged']})
 
 
 @login_required(login_url='login')

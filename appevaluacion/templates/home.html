@@ -1,0 +1,96 @@
+{% extends "index.html" %}
+{% block title %} POSGRADO | Jornadas {% endblock title %}
+{% load static %}
+
+
+{% block content %}
+
+<style>
+    .pcoded-content {
+        position: relative; /* Para el posicionamiento del contenedor */
+        height: 90vh; /* Ocupa toda la altura de la ventana */
+        overflow: hidden; /* Evita el desbordamiento */
+    }
+
+    .shadow-image {
+        width: 100%; /* Hace que la imagen ocupe todo el ancho */
+        height: 100%; /* Hace que la imagen ocupe toda la altura */
+        object-fit: cover; /* Mantiene la relación de aspecto */
+        position: absolute; /* Posiciona la imagen */
+        bottom: 0; /* Alinea en la parte inferior */
+        left: 0; /* Alinea en la parte izquierda */
+        opacity: 0.8; /* Opacidad de la imagen */
+    }
+
+    .shadow-image::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%; /* Ajusta la altura del área de desvanecimiento */
+        background: linear-gradient(rgba(166, 205, 237, 0.7), rgba(166, 205, 237, 0));
+        /* Ajusta el color final del gradiente para que coincida con el fondo */
+        pointer-events: none; /* Evita que el pseudo-elemento interfiera con la interacción */
+    }
+
+    .blurred-background {
+        position: absolute;
+        top: 0; /* Coloca en la parte inferior */
+        left: 0;
+        right: 0;
+        height: 30%; /* Ajusta la altura del área de desenfoque */
+        background: linear-gradient(rgba(166, 205, 237, 0.7), rgba(166, 205, 237, 0)); /* Desvanecimiento hacia abajo */
+        backdrop-filter: blur(10px); /* Efecto de desenfoque */
+        display: flex; /* Para centrar el texto */
+        align-items: center; /* Centra verticalmente */
+        justify-content: center; /* Centra horizontalmente */
+        text-align: center; /* Centra el texto */
+    }
+
+    .welcome-text {
+        color: rgb(255, 255, 255); /* Color del texto */
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; /* Tipo de letra */
+        font-size: 32px; /* Tamaño de la fuente */
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Sombra del texto */
+        text-transform: uppercase;
+        padding: 20px; /* Añadir espacio alrededor del texto */
+    }
+
+
+</style>
+
+<div class="pcoded-content">
+    <!-- [ breadcrumb ] start -->
+    <div class="page-header">
+        <div class="page-block">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="page-header-title">
+                        <h5 class="m-b-10">HOME</h5>
+                    </div>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>                       
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="shadow-image-container">
+        <img src="{% static '/assets/images/home.jpeg' %}" alt="" class="shadow-image"> <!-- Imagen que ocupa toda la pantalla -->
+    </div>
+    
+    <div class="blurred-background"> <!-- Contenedor con desenfoque -->
+        <h2 class="welcome-text">Bienvenido a la<br>Escuela de Posgrado</h2> <!-- Texto en dos líneas -->
+    </div>
+    <!-- [ Main Content ] end -->
+</div>
+{% endblock content %}
+
+
+{% block js %}
+
+
+{% endblock %}
+
