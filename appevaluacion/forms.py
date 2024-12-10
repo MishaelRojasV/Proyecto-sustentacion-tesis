@@ -247,7 +247,6 @@ class DetalleEvaluacionForm(forms.ModelForm):
             'validez': forms.RadioSelect,
             'dominio_tema': forms.RadioSelect,
             'sugerencias': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
-
         }
         labels = {
             'originalidad': 'Originalidad',
@@ -258,3 +257,10 @@ class DetalleEvaluacionForm(forms.ModelForm):
             'dominio_tema': 'Dominio del tema',
             'sugerencias': 'Sugerencias',
         }
+
+    # Validación del campo sugerencias
+    def clean_sugerencias(self):
+        sugerencias = self.cleaned_data.get('sugerencias')
+        if not sugerencias or sugerencias.strip() == "":
+            raise forms.ValidationError("El campo 'Sugerencias' es obligatorio.")
+        return sugerencias

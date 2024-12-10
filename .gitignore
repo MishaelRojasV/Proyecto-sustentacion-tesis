@@ -1,5 +1,6 @@
 # Entorno virtual
 env-formtesis/
+venv/
 
 # Archivos compilados de Python
 __pycache__/

@@ -62,7 +62,7 @@ def eliminar_jurado(request, id):
         messages.error(request, 'No tienes permiso para eliminar usuarios.')
     return redirect('listar_jurados')
 
-#------------------------------------------Eliminar USuario ------------------------------------------------
+#------------------------------------------enviar_credenciales USuario ------------------------------------------------
 def enviar_credenciales(request, pk):
     if request.method == 'POST':
         # Obtener la instancia del jurado correspondiente
